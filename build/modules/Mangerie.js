@@ -184,11 +184,15 @@ export default class Mangerie {
             this.dragger.active = false;
             this.dragger.object = null;
             document.body.style.cursor = "default";
+            for (let elem of this.interactors) {
+                elem.Release();
+            }
         }
     }
     // Reset all interaction elements to 0 & switch photo
     ResetKaleidoscope(direction) {
         // Stop interactions
+        this.Release();
         this.interactionAllowed = false;
         this.gameState = "resetting";
         document.body.style.cursor = "not-allowed";

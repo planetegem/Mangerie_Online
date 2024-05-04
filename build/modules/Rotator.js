@@ -44,25 +44,29 @@ export default class Rotator {
         }
     }
     MakeWidget() {
-        let centerX = this.cWidth * 0.5, centerY = this.cHeight * 0.5, points = [];
-        // Helper vars (eases reactive design)
-        let var1 = this.outerRadius - this.innerRadius, var2 = (var1 / 3) * 4, var3 = var2 + var1 * 1.5;
-        points.push(new Point(centerX - var1 * 0.5, centerY - this.innerRadius, centerX, centerY));
-        points.push(new Point(centerX - var1 * 0.5, centerY - (this.innerRadius + var1 * 2), centerX, centerY));
-        points.push(new Point(centerX - (var1 * 0.5 + var2), centerY - (this.innerRadius + var1 * 2 + var2), centerX, centerY));
-        points.push(new Point(centerX - var3, centerY - (this.innerRadius + var1 * 2 + var2), centerX, centerY));
-        points.push(new Point(centerX - var3, centerY - (this.innerRadius + var3), centerX, centerY));
-        points.push(new Point(centerX - (var2 * 3 + var1), centerY - (this.innerRadius + var1 + var3), centerX, centerY));
-        points.push(new Point(centerX - var3, centerY - (this.innerRadius + var1 * 2 + var3), centerX, centerY));
-        points.push(new Point(centerX - var3, centerY - (this.innerRadius + var1 * 3 + var2), centerX, centerY));
-        points.push(new Point(centerX + var3, centerY - (this.innerRadius + var1 * 3 + var2), centerX, centerY));
-        points.push(new Point(centerX + var3, centerY - (this.innerRadius + var1 * 2 + var3), centerX, centerY));
-        points.push(new Point(centerX + (var2 * 3 + var1), centerY - (this.innerRadius + var1 + var3), centerX, centerY));
-        points.push(new Point(centerX + var3, centerY - (this.innerRadius + var3), centerX, centerY));
-        points.push(new Point(centerX + var3, centerY - (this.innerRadius + var1 * 2 + var2), centerX, centerY));
-        points.push(new Point(centerX + (var1 * 0.5 + var2), centerY - (this.innerRadius + var1 * 2 + var2), centerX, centerY));
-        points.push(new Point(centerX + var1 * 0.5, centerY - (this.innerRadius + var1 * 2), centerX, centerY));
-        points.push(new Point(centerX + var1 * 0.5, centerY - this.innerRadius, centerX, centerY));
+        let points = [];
+        // HELPER VARS
+        let centerX = this.cWidth * 0.5, centerY = this.cHeight * 0.5, width = this.circleWidth * this.cWidth, baseX = width * 1.5, baseY = centerY - this.innerRadius, arrowY = baseY - width * 2.5, arrowX = baseX * 3, arrowWidth = baseX;
+        // LEFT ARROW
+        points.push(new Point(centerX - baseX, baseY, centerX, centerY));
+        points.push(new Point(centerX - baseX, arrowY + width * 0.5, centerX, centerY));
+        points.push(new Point(centerX - (arrowX - arrowWidth), arrowY + width * 0.5, centerX, centerY));
+        points.push(new Point(centerX - (arrowX - arrowWidth), arrowY + width, centerX, centerY));
+        points.push(new Point(centerX - arrowX, arrowY, centerX, centerY));
+        points.push(new Point(centerX - (arrowX - arrowWidth), arrowY - width, centerX, centerY));
+        points.push(new Point(centerX - (arrowX - arrowWidth), arrowY - width * 0.5, centerX, centerY));
+        points.push(new Point(centerX - (baseX - width), arrowY - width * 0.5, centerX, centerY));
+        points.push(new Point(centerX - (baseX - width), baseY, centerX, centerY));
+        // RIGHT ARROW
+        points.push(new Point(centerX + (baseX - width), baseY, centerX, centerY));
+        points.push(new Point(centerX + (baseX - width), arrowY - width * 0.5, centerX, centerY));
+        points.push(new Point(centerX + (arrowX - arrowWidth), arrowY - width * 0.5, centerX, centerY));
+        points.push(new Point(centerX + (arrowX - arrowWidth), arrowY - width, centerX, centerY));
+        points.push(new Point(centerX + arrowX, arrowY, centerX, centerY));
+        points.push(new Point(centerX + (arrowX - arrowWidth), arrowY + width, centerX, centerY));
+        points.push(new Point(centerX + (arrowX - arrowWidth), arrowY + width * 0.5, centerX, centerY));
+        points.push(new Point(centerX + baseX, arrowY + width * 0.5, centerX, centerY));
+        points.push(new Point(centerX + baseX, baseY, centerX, centerY));
         return new Polygon(points);
     }
     Resize() {
@@ -100,21 +104,6 @@ export default class Rotator {
             const ctx = this.canvas.getContext("2d");
             if (ctx != null) {
                 ctx.clearRect(0, 0, this.cWidth, this.cHeight);
-                // Draw widget shadow
-                let shadowMargin = this.cWidth * 0.003;
-                ctx.save();
-                ctx.translate(shadowMargin, -shadowMargin);
-                ctx.fillStyle = "black";
-                ctx.globalAlpha = 0.2;
-                ctx.beginPath();
-                ctx.arc(this.cWidth * 0.5, this.cHeight * 0.5, this.outerRadius, 0, 2 * Math.PI);
-                ctx.moveTo(this.widget.Points[0].x, this.widget.Points[0].y);
-                for (let i = 1; i < this.widget.Points.length; i++) {
-                    ctx.lineTo(this.widget.Points[i].x, this.widget.Points[i].y);
-                }
-                ctx.fill();
-                ctx.restore();
-                // Draw real widget
                 ctx.beginPath();
                 ctx.fillStyle = "#395e5e";
                 ctx.globalAlpha = 1;
