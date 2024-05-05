@@ -141,6 +141,16 @@ export default class Mangerie {
                 this.ResetKaleidoscope(1);
             }
         });
+        document.getElementById("previous-image-mobile").addEventListener("click", () => {
+            if (this.interactionAllowed) {
+                this.ResetKaleidoscope(-1);
+            }
+        });
+        document.getElementById("next-image-mobile").addEventListener("click", () => {
+            if (this.interactionAllowed) {
+                this.ResetKaleidoscope(1);
+            }
+        });
         // Recalculate all canvas elements when resizing
         window.addEventListener("resize", () => {
             for (let module of this.modules) {
