@@ -55,7 +55,7 @@ export default class Angler {
     MakeWidget() {
         let points = [];
         // Helper vars
-        let centerX = this.cWidth * 0.5, centerY = this.cHeight * 0.5, width = this.parent.rotatorRadius * this.cWidth, baseY = centerY - this.innerRadius, circleStartY = baseY - width * 3.75, circleCenterY = circleStartY - width * 1.4;
+        let centerX = this.cWidth * 0.5, centerY = this.cHeight * 0.5, width = this.parent.RotatorRadius * this.cWidth, baseY = centerY - this.innerRadius, circleStartY = baseY - width * 3.5, circleCenterY = circleStartY - width * 1.4;
         // Widget Handle
         points.push(new Point(centerX - width * 0.4, baseY, centerX, centerY));
         points.push(new Point(centerX - width * 0.4, circleStartY, centerX, centerY));
@@ -87,8 +87,8 @@ export default class Angler {
         this.cWidth = this.canvas.width;
         this.cHeight = this.canvas.height;
         // 2. Calculate radius of circle
-        this.innerRadius = this.cWidth * this.parent.kaleidoscopeRadius;
-        this.outerRadius = this.innerRadius + this.cWidth * this.parent.anglerRadius * 1.1;
+        this.innerRadius = this.cWidth * this.parent.KaleidoscopeRadius;
+        this.outerRadius = this.innerRadius + this.cWidth * this.parent.AnglerRadius * 1.1;
         // 3. Make arrow element
         this.widget = this.MakeWidget();
         this.dragWidget = this.MakeDragWidget();

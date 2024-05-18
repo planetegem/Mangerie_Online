@@ -4,7 +4,7 @@ h1 {
 body {
     margin: 0;
     padding: 0;
-    font-size: min(2.5vw, 2.2vh);
+    font-size: max(12px, min(2.5vw, 2.2vh));
 }
 header {
     display: flex;
@@ -47,7 +47,7 @@ h1 {
     font-size: 1.1em;
     margin: 0.75em 0;
 }
-#main-content h3 {
+#main-content h2 {
     font-family: Arial, Helvetica, sans-serif;
     font-variant: small-caps;
     margin: 1.5em 0 0.75em; 
@@ -64,7 +64,7 @@ ul {
 }
 li {
     text-indent: 0;
-    margin: 0.25em 2em;
+    margin: 0.5em 2em;
 }
 li::marker {
     font-size: 1.25em;
@@ -94,7 +94,6 @@ nav a:active {
         grid-template-rows: auto;
         grid-template-columns: 55% 45%;
         text-indent: 1.5em;
-
     }
     #main-content p {
         text-align: justify;
@@ -131,9 +130,13 @@ footer p {
     border-radius: 0.05em;
     padding: 0.2em;
 }
-#returnbutton h4 {
+#returnbutton p {
+    font-size: 1.20em;
+    opacity: 0.8;
     text-align: left;
     margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
     font-variant: small-caps;
     margin-left: 0.2em;
 }
@@ -143,6 +146,7 @@ footer p {
     height: 2.5em;
     background-repeat:no-repeat;
     background-size:contain;
+    display: block;
 }
 #returnbutton:hover {
     color: #7D1E2D;

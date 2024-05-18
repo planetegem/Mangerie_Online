@@ -24,7 +24,7 @@ export default class Rotator {
         this.startAngle = 0;
         this.clickedAngle = 0;
         this.parent = parent;
-        this.circleWidth = parent.rotatorRadius;
+        this.circleWidth = parent.RotatorRadius;
         this.kaleidoscope = kaleidoscope;
         this.canvas = canvas;
         this.Resize();
@@ -76,9 +76,10 @@ export default class Rotator {
         this.cWidth = this.canvas.width;
         this.cHeight = this.canvas.height;
         // 2. Calculate radius of circle
-        this.innerRadius = this.cWidth * this.parent.kaleidoscopeRadius + this.cWidth * this.parent.anglerRadius;
+        this.innerRadius = this.cWidth * this.parent.KaleidoscopeRadius + this.cWidth * this.parent.AnglerRadius;
         this.outerRadius = this.innerRadius + this.cWidth * this.circleWidth;
         // 3. Make arrow element
+        this.circleWidth = this.parent.RotatorRadius;
         this.widget = this.MakeWidget();
     }
     // Interaction events

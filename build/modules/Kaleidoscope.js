@@ -32,7 +32,7 @@ export default class Kaleidoscope {
         this.parent = parent;
         this.canvas = canvas;
         this.sketchCanvas = document.createElement("canvas");
-        this.radius = parent.kaleidoscopeRadius;
+        this.radius = parent.KaleidoscopeRadius;
         this.Resize();
     }
     // Main functions

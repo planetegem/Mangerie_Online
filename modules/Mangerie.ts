@@ -10,7 +10,6 @@ import ImageSelector from "./ImageSelector.js";
 
 export default class Mangerie {
     private modules: StandardModule[] = [];
-    public get Modules(): StandardModule[] { return this.modules}
     private interactors: InteractiveModule[] = [];
     private dragger: Dragger = {active: false, object: null};
 
@@ -24,12 +23,21 @@ export default class Mangerie {
     private switchSound: HTMLAudioElement;
     private switchPlayed: boolean = false;
 
-
-    public readonly kaleidoscopeRadius: number = 0.35;
-    public readonly rotatorRadius: number = 0.02;
-    public readonly anglerRadius: number = 0.0075;
+    // Interface element sizes (fraction of canvas size)
+    private kaleidoscopeRadius: number;
+    private rotatorRadius: number;
+    private anglerRadius: number;
+    public get KaleidoscopeRadius(): number { return this.kaleidoscopeRadius; }
+    public get RotatorRadius(): number { return this.rotatorRadius; }
+    public get AnglerRadius(): number { return this.anglerRadius; }
 
     public constructor (pictureBook: KaleidoscopePicture[], soundLibrary: Map<string, SoundObject>){
+        // Set interface values: if viewed on mobile, interface elements should be larger
+        let isMobile: boolean = window.innerWidth < 600;
+        this.kaleidoscopeRadius = isMobile ? 0.32 : 0.35;
+        this.rotatorRadius = isMobile ? 0.0275 : 0.02;
+        this.anglerRadius = isMobile ? 0.0075 : 0.0075;
+
         // Assign sounds
         this.switchSound = soundLibrary.get("switch")!.object;
 
@@ -170,6 +178,12 @@ export default class Mangerie {
 
         // Recalculate all canvas elements when resizing
         window.addEventListener("resize", () => {
+            // Set interface values: if viewed on mobile, interface elements should be larger
+            let isMobile: boolean = window.innerWidth < 600;
+            this.kaleidoscopeRadius = isMobile ? 0.32 : 0.35;
+            this.rotatorRadius = isMobile ? 0.0275 : 0.02;
+            this.anglerRadius = isMobile ? 0.0075 : 0.0075;
+
             for (let module of this.modules){
                 module.Resize();
             }
@@ -251,12 +265,13 @@ export default class Mangerie {
             if (ang > 1) {
                 // If so: calculate budget to spend on angler (150ms per position step)
                 let maxPos = this.angler.MaxFacets;
-                this.anglerDistance = ang > maxPos ? (2 * maxPos - 2) - ang: ang - 1;
+                this.anglerDistance = ang > maxPos ? (2 * maxPos - 1) - ang: ang - 1;
                 this.anglerBudget = this.anglerDistance * 200;
                 this.anglerAnimation = true;
             } else {
                 this.anglerAnimation = false;
             }
+            console.log(this.anglerDistance);
 
             // Reset time budget (used to calculate animations)
             this.usedBudget = 0;

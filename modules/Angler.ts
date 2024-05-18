@@ -84,8 +84,8 @@ export default class Angler implements InteractiveModule {
 
         // Helper vars
         let centerX = this.cWidth * 0.5, centerY = this.cHeight * 0.5,
-            width = this.parent.rotatorRadius * this.cWidth, baseY = centerY - this.innerRadius,
-            circleStartY = baseY - width * 3.75, circleCenterY = circleStartY - width * 1.4;
+            width = this.parent.RotatorRadius * this.cWidth, baseY = centerY - this.innerRadius,
+            circleStartY = baseY - width * 3.5, circleCenterY = circleStartY - width * 1.4;
         
         // Widget Handle
         points.push(new Point(centerX - width * 0.4, baseY, centerX, centerY));
@@ -127,8 +127,8 @@ export default class Angler implements InteractiveModule {
         this.cHeight = this.canvas.height;
 
         // 2. Calculate radius of circle
-        this.innerRadius = this.cWidth * this.parent.kaleidoscopeRadius;
-        this.outerRadius = this.innerRadius + this.cWidth * this.parent.anglerRadius * 1.1;
+        this.innerRadius = this.cWidth * this.parent.KaleidoscopeRadius;
+        this.outerRadius = this.innerRadius + this.cWidth * this.parent.AnglerRadius * 1.1;
 
         // 3. Make arrow element
         this.widget = this.MakeWidget();

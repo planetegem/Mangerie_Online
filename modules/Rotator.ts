@@ -28,7 +28,7 @@ export default class Rotator implements InteractiveModule {
     // Constructor
     constructor (canvas: HTMLCanvasElement, kaleidoscope: Kaleidoscope, parent: Mangerie, sounds: HTMLAudioElement[]){
         this.parent = parent;
-        this.circleWidth = parent.rotatorRadius
+        this.circleWidth = parent.RotatorRadius
         this.kaleidoscope = kaleidoscope;
         this.canvas = canvas;
 
@@ -109,10 +109,11 @@ export default class Rotator implements InteractiveModule {
         this.cHeight = this.canvas.height;
 
         // 2. Calculate radius of circle
-        this.innerRadius = this.cWidth * this.parent.kaleidoscopeRadius + this.cWidth * this.parent.anglerRadius;
+        this.innerRadius = this.cWidth * this.parent.KaleidoscopeRadius + this.cWidth * this.parent.AnglerRadius;
         this.outerRadius = this.innerRadius + this.cWidth * this.circleWidth;
 
         // 3. Make arrow element
+        this.circleWidth = this.parent.RotatorRadius;
         this.widget = this.MakeWidget();
     }
     
