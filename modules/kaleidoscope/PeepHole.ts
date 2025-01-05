@@ -1,11 +1,13 @@
 import { StandardModule } from "modules/Interfaces.js";
-import Mangerie from "./Mangerie";
+import Mangerie from "./Kaleidoscope.js";
 
-export default class Kaleidoscope implements StandardModule{
+// PEEPHOLE IS WHERE IMAGE, ANGLE AND ROTATION ARE COMBINED
+// I.E. WHAT YOU SEE THROUGH THE PEEPHOLE OF A KALEIDOSCOPE
+
+export default class PeepHole implements StandardModule{
     // Canvas elements: sketchCanvas is used to make temporary image components (for easier transformations)
     private canvas: HTMLCanvasElement;
     private sketchCanvas: HTMLCanvasElement;
-    private parent: Mangerie;
 
     // Current base image used by the kaleidoscope
     private image: HTMLImageElement = new Image();
@@ -38,7 +40,6 @@ export default class Kaleidoscope implements StandardModule{
     
     // Constructor
     constructor(canvas: HTMLCanvasElement, parent: Mangerie){
-        this.parent = parent;
         this.canvas = canvas;
         this.sketchCanvas = document.createElement("canvas");
         this.radius = parent.KaleidoscopeRadius;
@@ -61,7 +62,7 @@ export default class Kaleidoscope implements StandardModule{
     }
     public Draw(): void {
         if (this.canvas === null){
-            throw "Error: attempting to draw when Kaleidoscope canvas hasn't been set!";
+            throw "Error: attempting to draw when PeepHole canvas hasn't been set!";
         } else {
             const final = this.canvas.getContext("2d"),
                   ctx = this.sketchCanvas.getContext("2d");
@@ -113,7 +114,7 @@ export default class Kaleidoscope implements StandardModule{
                 final.restore();
                 
             } else {
-                throw "Warning: Kaleidoscope ctx failed";
+                throw "Warning: PeepHole ctx failed";
             }
         }
     }

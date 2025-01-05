@@ -1,0 +1,16 @@
+:root {
+    --mainColor: #395e5e;
+    --filter: invert(35%) sepia(27%) saturate(484%) hue-rotate(131deg) brightness(89%) contrast(94%);
+    --filterActive: invert(35%) sepia(27%) saturate(484%) hue-rotate(131deg) brightness(66%) contrast(94%);
+    --borderWidth: min(2.5vw, 2vh);
+    --mainPadding: min(10vw, 5vh);
+    --fontSize: min(4vw, 2.5vh);
+}
+h1, h2, h3, h4, h5, a, button, p, span {
+    all: unset;
+}
+body {
+    font-size: var(--fontSize);
+    background-color: white;
+    margin: 0; padding: 0;
+}

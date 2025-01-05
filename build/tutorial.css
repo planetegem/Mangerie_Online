@@ -1,0 +1,70 @@
+/* TUTORIAL STYLING: DIALOG */
+
+#tutorial {
+    position: absolute;
+    width: 100%; height: 100%;
+    z-index: 500;
+    margin: auto;
+    top: 0; bottom: 0;  left: 0; right: 0;
+    opacity: 0;
+    font-size: 0.95em;
+    align-items: center;
+}
+#tutorial::before {
+    content: "";
+    position: absolute;
+    width: 100%; height: 100%;
+    background-color: var(--mainColor);
+    opacity: 0.75;
+    pointer-events: none;
+    margin: auto;
+    top: 0; bottom: 0;  left: 0; right: 0;
+}
+
+.tutorial-screen {
+    display: none;
+    border: solid calc(0.5 * var(--borderWidth)) var(--mainColor);
+    background-color: white;
+    z-index: 501;
+    margin: 0 auto;
+    width: 90vw;
+    height: fit-content;
+    flex-flow: column nowrap;
+    align-items: center;
+}
+.tutorial-screen img {
+    width: 90%;
+    margin: 1em auto 1em;
+    border: grey 0.1em solid;
+}
+.tutorial-screen p {
+    width: 90%;
+}
+.tutorial-screen h2 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-variant: small-caps;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-align: center;
+    color: var(--mainColor);
+    margin: 1em 0 0.5em;
+}
+.tutorial-screen h3 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 0.9em;
+    color: grey;
+}
+.tutorial-screen span {
+    margin: 1rem 1.5rem;
+    color:#395e5e;
+    font-variant: small-caps;
+    font-size: 1.15em;
+    font-weight: bold;
+    animation: blinkingContinue 1.2s steps(5, start) infinite;
+}
+@media (min-aspect-ratio: 1/1){
+    .tutorial-screen {
+        width: 68vh;
+        height: fit-content;
+    }
+}

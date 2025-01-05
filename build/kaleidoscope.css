@@ -1,0 +1,214 @@
+#kaleidoscope-container {
+    display: grid;
+    height: 100vh;
+    width: 100vw;
+    grid-template-columns: 100%;
+    grid-template-rows: 1fr 105vw 1fr;
+    grid-template-areas: "left-button" "kaleidoscope" "right-button";
+    align-items: center;
+    justify-items: center;
+    margin: 0; padding: 0;
+    opacity: 0;
+    overflow: hidden;
+}
+#kaleidoscope {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    height: 100vw;
+    z-index: 1;
+    padding: 0; margin: 0;
+    padding-top: 5vw;
+    background-image: url("assets/marble.jpg");
+    background-size: 100% 100%;
+    grid-area: kaleidoscope;
+}
+#kaleidoscope::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    margin: auto;
+    background-color: var(--mainColor);
+    opacity: 0.175;
+    z-index: 1;
+}
+#canvas-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    margin: 0;
+}
+#kaleidoscope canvas {
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    margin: auto;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+}
+#image-canvas {
+    pointer-events: none;
+}
+.landscape {
+    display: none;
+}
+
+
+button {
+    user-select: none;
+}
+button:hover {
+    cursor: pointer;
+}
+
+.portrait {
+    display: block;
+}
+
+
+
+#left-button-container, 
+#right-button-container {
+    display: flex;
+    z-index: -5;
+    align-items: center;
+    width: 100%;
+    filter: var(--filter);
+    border-color: black;
+    border-style: solid;
+}
+#left-button-container:has(button:hover), 
+#left-button-container:has(button:active),
+#right-button-container:has(button:hover), 
+#right-button-container:has(button:active) {
+    filter: var(--filterActive) !important;
+}
+#left-button-container {    
+    justify-self: center;
+    align-self: end;  
+    grid-area: left-button;
+    border-width: 0 0 var(--borderWidth) 0;
+}
+#right-button-container {
+    justify-self: center;
+    align-self: start;    
+    grid-area: right-button;
+    border-width: var(--borderWidth) 0 0 0;
+}
+#previous-image-portrait, 
+#next-image-portrait {
+    height: 15vw;
+    margin: 0 auto;
+}
+#previous-image-portrait img, 
+#next-image-portrait img {
+    height: 100%;
+    user-select: none;
+}
+#previous-image-portrait {
+    transform: translateX(100%);
+}
+#next-image-portrait {
+    transform: translateX(-100%);
+}
+
+.game-button {
+    position: absolute;
+    filter: var(--filter);
+    width: 10vw;
+    height: 10vw;
+    top: 4vw;
+    z-index: 50;
+    user-select: none; 
+}
+#tutorial-button-container {
+    left: 4vw;
+}
+#return-button-container {
+    right: 4vw;
+}
+.game-button img {
+    width: 100%;
+    height: 100%;
+}
+.game-button:hover {
+    filter: var(--filterActive);
+    cursor: pointer;
+}
+.game-button:active {
+    filter: var(--filterActive);
+}
+
+@media (min-aspect-ratio: 1/1){
+    #kaleidoscope-container {
+        grid-template-columns: 1fr 100vh 1fr;
+        grid-template-rows: 100%;
+        grid-template-areas: "left-button kaleidoscope right-button";
+    }
+    #kaleidoscope {
+        width: 100%;
+        height: 100%;
+        border-width: 0;
+        padding-top: 0;
+    }
+    #canvas-container {
+        max-height: 100vh;
+        max-width: 100vh;
+    }
+    .landscape {
+        display: block;
+    }
+    .portrait {
+        display: none;
+    }
+    #left-button-container, 
+    #right-button-container {
+        height: 100%;
+        max-width: 8vh;
+    }
+    #left-button-container {    
+        justify-self: end;
+        border-width: 0 var(--borderWidth) 0 0;
+    }
+    #right-button-container {    
+        justify-self: start;
+        border-width: 0 0 0 var(--borderWidth);
+    }
+    #previous-image-landscape {
+        transform: translateX(0%);
+    }
+    #next-image-landscape {
+        transform: translateX(-50%);
+    }
+    #previous-image-landscape img, 
+    #next-image-landscape img {
+        height: 8vh;
+        user-select: none;
+    }
+    .game-button {
+        width: 6vh;
+        height: 6vh;
+        top: 1.5vh;
+    }
+    #tutorial-button-container {
+        left: 2vh;
+    }
+    #return-button-container {
+        right: 2vh;
+    }
+}
+@media (min-aspect-ratio: 1.5/1){
+    #kaleidoscope-container {
+        grid-template-columns: 1fr 105vh 1fr;
+    }
+    #previous-image-landscape img, 
+    #next-image-landscape img {
+        height: 12vh;
+    }
+    #left-button-container, 
+    #right-button-container {
+        max-width: 12vh;
+    }
+}

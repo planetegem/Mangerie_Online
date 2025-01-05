@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="29.999992mm"
+   height="15.000005mm"
+   viewBox="0 0 29.999992 15.000005"
+   version="1.1"
+   id="svg1"
+   xml:space="preserve"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><defs
+     id="defs1" /><g
+     id="layer1"
+     transform="translate(-99.188586,-140.49578)"><g
+       id="g1"
+       transform="matrix(0.26778849,0,0,0.25,95.037862,135.37079)"
+       style="fill:#000000;stroke:none"><g
+         id="Layer_1"
+         style="fill:#000000;stroke:none">
+</g><g
+         id="Layer_2"
+         style="fill:#000000;stroke:none">
+	<path
+   id="polygon1"
+   style="fill:#000000;stroke:none;stroke-width:5;stroke-miterlimit:10"
+   class="st0"
+   d="m 55.5,20.5 v 20 h 30 v 20 h -30 v 20 l -40,-30 z" />
+</g><g
+         id="Layer_3"
+         style="fill:#000000;stroke:none">
+</g></g><rect
+       style="opacity:1;fill:#000000;fill-rule:evenodd;stroke:none;stroke-width:0.222065"
+       id="rect2"
+       width="20.265076"
+       height="5.1334248"
+       x="108.9235"
+       y="145.42908" /></g><style
+     type="text/css"
+     id="style1">
+	.st0{stroke:#395e5e;fill:#395e5e;stroke-width:5;stroke-miterlimit:10;}
+</style></svg>
