@@ -6,9 +6,9 @@ import { Block } from "../Interfaces.js";
 // WELCOME BLOCK: SHORT INTRO WHEN GAME IS LOADED
 export default class WelcomeBlock extends PhadeBlock implements Block {
     // CONSTRUCTOR
-    constructor(mangerie: Mangerie, container: HTMLElement){
-        let welcome = document.getElementById("welcome-text") ?? document.createElement("error-welcome");
-        super(mangerie, container, welcome);
+    constructor(mangerie: Mangerie){
+        const welcome = document.getElementById("welcome-text")!;
+        super(mangerie, welcome, welcome);
 
         // OVERWRITE ANIMATION PROPERTIES
         this.durationIn = 300;

@@ -1,23 +1,42 @@
 import { easeInOut } from "../Helpers.js";
 // GROUND DISC DECIDES THE IMAGE AT THE BASE OF THE KALEIDSCOPE
 export default class GroundDisc {
+    set PictureBook(pictureBook) {
+        this.pictureBook = pictureBook;
+        this.index = 0;
+        this.kaleidoscope.Image = this.pictureBook[this.index].object;
+    }
     set Index(index) {
-        let max = this.pictureBook.length - 1;
-        if (index > max) {
-            this.index = 0;
-        }
-        else if (index < 0) {
-            this.index = max;
+        if (this.pictureBook !== null) {
+            let max = this.pictureBook.length - 1;
+            if (index > max) {
+                this.index = 0;
+            }
+            else if (index < 0) {
+                this.index = max;
+            }
+            else {
+                this.index = index;
+            }
+            this.kaleidoscope.Image = this.pictureBook[this.index].object;
+            this.dialogLines = this.LineWrapper(this.pictureBook[this.index].desc);
         }
         else {
-            this.index = index;
+            console.log("Issue with Kaleidoscope grounddisc: no picture book was set");
         }
-        this.kaleidoscope.Image = this.pictureBook[this.index].object;
-        this.dialogLines = this.LineWrapper(this.pictureBook[this.index].desc);
     }
     get Index() { return this.index; }
+    // Reset all props to base values
+    Reset() {
+        this.index = 0;
+        if (this.pictureBook !== null)
+            this.kaleidoscope.Image = this.pictureBook[this.index].object;
+        this.Resize();
+    }
     // Constructor
-    constructor(canvas, kaleidoscope, pictureBook) {
+    constructor(canvas, kaleidoscope) {
+        // Main logic: decides which image is used as base for the kaleidoscope
+        this.pictureBook = null;
         // Geometry & interface
         this.cWidth = 0;
         this.cHeight = 0;
@@ -30,9 +49,7 @@ export default class GroundDisc {
         this.direction = 0;
         this.canvas = canvas;
         this.kaleidoscope = kaleidoscope;
-        this.pictureBook = pictureBook;
         this.index = 0;
-        this.kaleidoscope.Image = this.pictureBook[this.index].object;
         this.Resize();
     }
     LineWrapper(str) {
@@ -63,7 +80,8 @@ export default class GroundDisc {
         // Get font size
         this.fontSize = Math.round(this.cHeight * 0.035);
         this.dWidth = this.cWidth * 0.68;
-        this.dialogLines = this.LineWrapper(this.pictureBook[this.index].desc);
+        if (this.pictureBook !== null)
+            this.dialogLines = this.LineWrapper(this.pictureBook[this.index].desc);
     }
     set Translation(val) {
         if (val >= 1 || val <= 0) {

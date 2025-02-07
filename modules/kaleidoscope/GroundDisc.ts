@@ -1,7 +1,6 @@
 import { easeInOut } from "../Helpers.js";
-import { StandardModule } from "../Interfaces.js";
+import { StandardModule, AssetObject } from "../Interfaces.js";
 import Kaleidoscope from "./PeepHole.js";
-import AssetObject from "../assets/AssetObject.js";
 
 // GROUND DISC DECIDES THE IMAGE AT THE BASE OF THE KALEIDSCOPE
 export default class GroundDisc implements StandardModule {
@@ -10,29 +9,44 @@ export default class GroundDisc implements StandardModule {
     private kaleidoscope: Kaleidoscope;
 
     // Main logic: decides which image is used as base for the kaleidoscope
-    private pictureBook: AssetObject<HTMLImageElement>[];
-    private index: number;
-    public set Index(index: number){
-        let max: number = this.pictureBook.length - 1;
-        if (index > max){
-            this.index = 0;
-        } else if (index < 0){
-            this.index = max;
-        } else {
-            this.index = index;
-        }
-        this.kaleidoscope.Image = this.pictureBook[this.index].object;
-        this.dialogLines = this.LineWrapper(this.pictureBook[this.index].desc);
-    }
-    public get Index(): number { return this.index; }
-
-    // Constructor
-    constructor(canvas: HTMLCanvasElement, kaleidoscope: Kaleidoscope, pictureBook: AssetObject<HTMLImageElement>[]){
-        this.canvas = canvas;
-        this.kaleidoscope = kaleidoscope;
+    private pictureBook: AssetObject<HTMLImageElement>[] | null = null;
+    set PictureBook(pictureBook: AssetObject<HTMLImageElement>[]){
         this.pictureBook = pictureBook;
         this.index = 0;
         this.kaleidoscope.Image = this.pictureBook[this.index].object;
+    }
+
+    private index: number;
+    public set Index(index: number){
+        if (this.pictureBook !== null){
+            let max: number = this.pictureBook.length - 1;
+            if (index > max){
+                this.index = 0;
+            } else if (index < 0){
+                this.index = max;
+            } else {
+                this.index = index;
+            }
+            this.kaleidoscope.Image = this.pictureBook[this.index].object;
+            this.dialogLines = this.LineWrapper(this.pictureBook[this.index].desc);
+        } else {
+            console.log("Issue with Kaleidoscope grounddisc: no picture book was set");
+        }
+    }
+    public get Index(): number { return this.index; }
+
+    // Reset all props to base values
+    public Reset():void {
+        this.index = 0;
+        if (this.pictureBook !== null) this.kaleidoscope.Image = this.pictureBook[this.index].object;
+        this.Resize();
+    }
+    
+    // Constructor
+    constructor(canvas: HTMLCanvasElement, kaleidoscope: Kaleidoscope){
+        this.canvas = canvas;
+        this.kaleidoscope = kaleidoscope;
+        this.index = 0;
         this.Resize();
     }
 
@@ -76,7 +90,7 @@ export default class GroundDisc implements StandardModule {
         // Get font size
         this.fontSize = Math.round(this.cHeight*0.035);
         this.dWidth = this.cWidth * 0.68;
-        this.dialogLines = this.LineWrapper(this.pictureBook[this.index].desc);
+        if (this.pictureBook !== null) this.dialogLines = this.LineWrapper(this.pictureBook[this.index].desc);
     }
 
     // Animation values

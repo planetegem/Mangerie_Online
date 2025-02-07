@@ -1,5 +1,5 @@
 import Angler from "./Angler.js";
-import { Dragger, InteractiveModule, StandardModule } from "../Interfaces.js";
+import { AssetObject, Dragger, InteractiveModule, StandardModule } from "../Interfaces.js";
 import PeepHole from "./PeepHole.js";
 
 import Rotator from "./Rotator.js";
@@ -10,17 +10,20 @@ import Mangerie from "../Mangerie.js";
 export default class Kaleidoscope {
     protected modules: StandardModule[] = [];
     private interactors: InteractiveModule[] = [];
-    private dragger: Dragger = {active: false, object: null};
+    protected dragger: Dragger = {active: false, object: null};
 
     // Components
-    private kaleidoscope: PeepHole;
-    private rotator: Rotator;
-    private angler: Angler;
-    private imageSelector: GroundDisc;
+    protected kaleidoscope: PeepHole;
+    protected rotator: Rotator;
+    protected angler: Angler;
+    protected imageSelector: GroundDisc;
+    public set PictureBook(pictureBook: AssetObject<HTMLImageElement>[]){
+        this.imageSelector.PictureBook = pictureBook;
+    }
 
     // Sounds
     private switchSound: HTMLAudioElement;
-    private switchPlayed: boolean = false;
+    protected switchPlayed: boolean = false;
 
     // HTML buttons
     private leftButton: HTMLElement;
@@ -30,9 +33,9 @@ export default class Kaleidoscope {
     private buttonWidth: number;
 
     // Interface element sizes (fraction of canvas size)
-    private kaleidoscopeRadius: number;
-    private rotatorRadius: number;
-    private anglerRadius: number;
+    protected kaleidoscopeRadius: number;
+    protected rotatorRadius: number;
+    protected anglerRadius: number;
     public get KaleidoscopeRadius(): number { return this.kaleidoscopeRadius; }
     public get RotatorRadius(): number { return this.rotatorRadius; }
     public get AnglerRadius(): number { return this.anglerRadius; }
@@ -92,7 +95,7 @@ export default class Kaleidoscope {
         const imageCanvas: HTMLCanvasElement = document.createElement("canvas");
         imageCanvas.setAttribute("id", "image-canvas");
         container.appendChild(imageCanvas);
-        this.imageSelector = new GroundDisc(imageCanvas, this.kaleidoscope, mangerie.pictures.content);
+        this.imageSelector = new GroundDisc(imageCanvas, this.kaleidoscope);
         this.modules.push(this.imageSelector);
 
         // Give all canvas elements their proper size
@@ -156,7 +159,7 @@ export default class Kaleidoscope {
         });
 
         // Create event listeners: mouse wheel (for angler)
-        window.addEventListener("wheel", (e) => {
+        container.addEventListener("wheel", (e) => {
             e.preventDefault();
             if (this.interactionAllowed){
                 if (e.deltaY > 0){
@@ -189,23 +192,24 @@ export default class Kaleidoscope {
         this.rightHook.addEventListener("click", () => {
             if (this.interactionAllowed){ this.ResetKaleidoscope(1); }
         });
-
-        // Recalculate all canvas elements when resizing
         window.addEventListener("resize", () => {
-            // Set interface values: if viewed on mobile, interface elements should be larger
-            let isMobile: boolean = window.innerWidth < 600;
-            this.kaleidoscopeRadius = isMobile ? 0.32 : 0.35;
-            this.rotatorRadius = isMobile ? 0.0275 : 0.02;
-            this.anglerRadius = isMobile ? 0.0075 : 0.0075;
-
-            for (let module of this.modules){
-                module.Resize();
-            }
+            this.Resize();
         });
+
         this.interactionAllowed = false;
     }
 
     // EVENT METHODS
+    // Resizer: correct interface every time screen is resized (else canvas elements remain stuck)
+    protected Resize(){
+        const isMobile: boolean = window.innerWidth < 600;
+        this.kaleidoscopeRadius = isMobile ? 0.32 : 0.35;
+        this.rotatorRadius = isMobile ? 0.0275 : 0.02;
+        this.anglerRadius = isMobile ? 0.0075 : 0.0075;
+
+        this.modules.forEach((module) => module.Resize());
+    }
+
     // Called when touching main canvas
     private ClickHandler(mouseX: number, mouseY: number): void {
         for (let elem of this.interactors){
@@ -261,6 +265,7 @@ export default class Kaleidoscope {
         // If direction is 0 (only on first load), run last half of the image animation
         if (direction == 0){
             this.usedBudget = 0.5;
+            this.direction = direction;
         
         // Otherwise presume image switch animation: reset all parameters
         } else {

@@ -7,7 +7,7 @@ import Kaleidoscope from "../kaleidoscope/Kaleidoscope.js";
 export default class GameBlock extends Kaleidoscope implements Block {
     // FUNCTIONAL PROPERTIES
     protected mangerie: Mangerie;
-    private tutorialRequired: boolean = true;
+    private tutorialRequired: boolean;
 
     // ANIMATION PROPERTIES
     private phase: PhadePhase = PhadePhase.In;
@@ -23,14 +23,34 @@ export default class GameBlock extends Kaleidoscope implements Block {
         super(mangerie);
         this.mangerie = mangerie;
         this.container = container;
+
+        this.tutorialRequired = (localStorage.getItem("firstTime") == "true" || localStorage.getItem("firstTime") == null);
+
+        document.getElementById("tutorial-button")!.addEventListener("click", () => {
+            this.mangerie.SetState(GameState.Tutorial);
+        });
+        document.getElementById("return-button")!.addEventListener("click", () => {
+            this.Disable();
+        });
+
     }
 
     public Enable(): void {
         this.phase = PhadePhase.In;
         this.runtime = 0;
+
+        // Reset kaleidoscope props
+        this.Resize();
+        this.interactionAllowed = false;
+        this.modules.forEach((module) => {
+            module.Reset();
+            module.Draw();
+        });
+        this.switchPlayed = false;
     }
     public Disable(): void {
-
+        this.phase = PhadePhase.Out;
+        this.runtime = 0;
     }
 
 
@@ -40,7 +60,6 @@ export default class GameBlock extends Kaleidoscope implements Block {
         switch (this.phase){
             case PhadePhase.In:
                 if (this.runtime >= this.startFade){
-                    this.mangerie.SetState(GameState.Complete);
                     this.ResetKaleidoscope(0);
                     this.phase = PhadePhase.Hold;
                     this.runtime = 0;
@@ -53,14 +72,20 @@ export default class GameBlock extends Kaleidoscope implements Block {
                 if (this.resetting){
                     this.ResetAnimation(delta);
                 } else if (this.tutorialRequired && this.runtime >= this.holdTime){
-                    
                     this.tutorialRequired = false;
                     this.mangerie.SetState(GameState.Tutorial);
                 }
                 break;
             
             case PhadePhase.Out:
-
+                if (this.runtime >= this.startFade){
+                    this.mangerie.SetState(GameState.Menu);
+                    this.phase = PhadePhase.Done;
+                    document.body.style.cursor = "";
+                    this.runtime = 0;
+                } else {
+                    this.container.style.opacity = (1 - this.runtime/this.startFade).toString();
+                }
                 break;
         }
 

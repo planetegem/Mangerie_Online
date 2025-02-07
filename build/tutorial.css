@@ -34,7 +34,7 @@
 }
 .tutorial-screen img {
     width: 90%;
-    margin: 1em auto 1em;
+    margin: 1em auto 0.5em;
     border: grey 0.1em solid;
 }
 .tutorial-screen p {
@@ -66,5 +66,8 @@
     .tutorial-screen {
         width: 68vh;
         height: fit-content;
+    }
+    .tutorial-screen img {
+        width: 80%;
     }
 }

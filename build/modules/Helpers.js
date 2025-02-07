@@ -1,3 +1,17 @@
+// Helper function: fetch photo album from json
+export async function getJSON(path) {
+    try {
+        const response = await fetch(path);
+        if (!response.ok)
+            throw new Error(`JSON response not ok for ${path}`);
+        const json = await response.json();
+        return json;
+    }
+    catch (error) {
+        console.log(error);
+        return null;
+    }
+}
 // Helper function: calculate angle based on cartesian coordinates
 export function getAngle(x, y, centerX, centerY) {
     let xPos = x - centerX, yPos = centerY - y, angle = 0;
@@ -21,6 +35,7 @@ export function getAngle(x, y, centerX, centerY) {
 export function easeInOut(x) {
     return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
 }
+// Helper class for geometry
 export class Point {
     // Constructor: get cartesian coordinates & calculate polar equivalent
     constructor(x, y, originX = 0, originY = 0) {
@@ -54,6 +69,7 @@ export class Point {
         this.GoCartesian();
     }
 }
+// Helper class for geometry
 export class Polygon {
     get Points() {
         return this.points;

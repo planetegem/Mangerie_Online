@@ -24,6 +24,10 @@ export default class PhadeModal {
         this.phase = PhadePhase.Out;
         this.runtime = 0;
     }
+    Reset() {
+        this.modal.style.display = "none";
+        this.modal.style.opacity = "0";
+    }
     // ANIMATION METHOD: RETURNS ANIMATION PHASE
     Fade(delta) {
         this.runtime += delta;

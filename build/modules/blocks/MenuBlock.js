@@ -1,38 +1,69 @@
 import { GameState, PhadePhase } from "../Enums.js";
 import PhadeBlock from "./PhadeBlock.js";
 export default class MenuBlock extends PhadeBlock {
-    constructor(mangerie, container) {
-        var _a, _b, _c, _d;
-        const menu = (_a = document.getElementById("main-menu")) !== null && _a !== void 0 ? _a : document.createElement("menu-error");
-        container.appendChild(menu);
-        super(mangerie, container, menu);
+    constructor(mangerie) {
+        const menu = document.getElementById("main-menu");
+        super(mangerie, menu, menu);
+        // STATE MEMORY
+        this.startingGame = false;
+        this.fading = true;
         // MENU BUTTONS
-        this.start = (_b = document.getElementById("start-button")) !== null && _b !== void 0 ? _b : document.createElement("start-error");
-        this.album = (_c = document.getElementById("album-button")) !== null && _c !== void 0 ? _c : document.createElement("album-error");
-        this.info = (_d = document.getElementById("info-button")) !== null && _d !== void 0 ? _d : document.createElement("info-error");
+        this.start = document.getElementById("start-button");
+        this.album = document.getElementById("album-button");
+        this.info = document.getElementById("info-button");
+        this.logoDeco = document.getElementById("online-deco");
+        this.buttonContainer = document.getElementById("menu-buttons");
+        // TIMINGS
+        this.logoFade = 1500;
+        this.buttonsDelay = 1500;
+        this.buttonsFade = 1000;
         this.durationIn = 1000;
         this.durationOut = 1000;
+        this.logoDeco.style.animationDuration = (this.logoFade / 1000) + "s";
         // BUTTON EVENT LISTENERS
         this.start.addEventListener("click", () => {
             if (this.phase != PhadePhase.Hold)
                 return;
             const disable = this.Disable.bind(this);
             disable(true);
-            this.mangerie.SetState(GameState.Starting);
+            this.startingGame = true;
         });
         this.album.addEventListener("click", () => {
             if (this.phase != PhadePhase.Hold)
                 return;
+            this.mangerie.SetState(GameState.Album);
         });
-        menu.appendChild(this.album);
         this.info.addEventListener("click", () => {
             if (this.phase != PhadePhase.Hold)
                 return;
+            this.mangerie.SetState(GameState.Info);
         });
-        menu.appendChild(this.info);
     }
     Update(delta) {
         const fader = this.Fade.bind(this);
-        return fader(delta);
+        const state = fader(delta);
+        switch (state) {
+            case PhadePhase.Hold:
+                this.logoDeco.classList.add("start-fade");
+                if (this.fading) {
+                    if (this.runtime >= this.logoFade + this.buttonsDelay + this.buttonsFade) {
+                        this.buttonContainer.style.opacity = "1";
+                        this.fading = false;
+                    }
+                    else if (this.runtime >= this.logoFade + this.buttonsDelay) {
+                        this.buttonContainer.style.opacity = ((this.runtime - (this.logoFade + this.buttonsDelay)) / this.buttonsFade).toString();
+                    }
+                }
+                break;
+            case PhadePhase.Done:
+                this.logoDeco.classList.remove("start-fade");
+                this.fading = true;
+                this.buttonContainer.style.opacity = "0";
+                if (this.startingGame) {
+                    this.startingGame = false;
+                    this.mangerie.SetState(GameState.Titlecard);
+                }
+        }
+        return state;
     }
 }

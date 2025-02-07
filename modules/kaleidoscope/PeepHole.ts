@@ -13,6 +13,7 @@ export default class PeepHole implements StandardModule{
     private image: HTMLImageElement = new Image();
     public set Image(img: HTMLImageElement){
         this.image = img;
+        this.CropImage();
     }
 
     // Angle of the image (rotated around center)
@@ -51,6 +52,43 @@ export default class PeepHole implements StandardModule{
     private cHeight: number = 0;
     private radius: number;
 
+    // Reset all props to base values
+    public Reset():void {
+        this.angle = 0;
+        this.mirror = 2 * Math.PI;
+        this.facets = 1;
+        this.translation = -1;
+    }
+
+    // Image cropping
+    private xMargin: number = 0;
+    private yMargin: number = 0;
+    private imgWidth: number = 0;
+    private imgHeight: number = 0;
+
+    private CropImage(): void {
+        let width: number = this.image.naturalWidth, height: number = this.image.naturalHeight;
+
+        if (width > height){
+            this.imgHeight = this.cHeight;
+            this.imgWidth = this.cHeight * (width / height);
+            this.xMargin = -(this.imgWidth - this.imgHeight) / 2;
+            this.yMargin = 0;            
+
+        } else if (height > width){
+            this.imgWidth = this.cWidth;
+            this.imgHeight = this.cWidth * (height / width);
+            this.yMargin = -(this.imgHeight - this.imgWidth) / 2;
+            this.xMargin = 0;
+
+        } else {
+            this.imgWidth = this.cWidth;
+            this.imgHeight = this.cHeight;
+            this.xMargin = 0; this.yMargin = 0;
+        }
+
+    }
+
     // Main functions
     public Resize(): void {
         this.canvas.setAttribute("width", this.canvas.offsetWidth.toString());
@@ -59,6 +97,7 @@ export default class PeepHole implements StandardModule{
         this.cHeight = this.canvas.height;
         this.sketchCanvas.setAttribute("width", this.cWidth.toString());
         this.sketchCanvas.setAttribute("height", this.cHeight.toString());
+        this.CropImage();
     }
     public Draw(): void {
         if (this.canvas === null){
@@ -77,7 +116,7 @@ export default class PeepHole implements StandardModule{
                 ctx.translate(this.cWidth * 0.5, this.cHeight * 0.5);
                 ctx.rotate(this.angle);
                 ctx.translate(-this.cWidth * 0.5, -this.cHeight * 0.5);
-                ctx.drawImage(this.image, 0, 0, this.cWidth, this.cHeight);
+                ctx.drawImage(this.image, this.xMargin, this.yMargin, this.imgWidth, this.imgHeight);
                 ctx.restore();
 
                 if (this.facets > 1){
@@ -90,7 +129,7 @@ export default class PeepHole implements StandardModule{
                     ctx.scale(-1, 1);
                     ctx.rotate(this.angle);
                     ctx.translate(-this.cWidth * 0.5, -this.cHeight * 0.5);
-                    ctx.drawImage(this.image, 0, 0, this.cWidth, this.cHeight);
+                    ctx.drawImage(this.image, this.xMargin, this.yMargin, this.imgWidth, this.imgHeight);
                     ctx.restore();
                 }
 

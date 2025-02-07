@@ -8,6 +8,7 @@ export default class PhadeBlock {
         this.durationIn = 500;
         this.durationOut = 500;
         this.disableContainer = false;
+        this.enableContainer = false;
         this.mangerie = mangerie;
         this.container = container;
         this.mainElement = elem;
@@ -24,6 +25,9 @@ export default class PhadeBlock {
                     this.phase = PhadePhase.Hold;
                 }
                 else {
+                    if (this.enableContainer) {
+                        this.container.style.opacity = (this.runtime / this.durationIn).toString();
+                    }
                     this.mainElement.style.opacity = (this.runtime / this.durationIn).toString();
                 }
                 break;
@@ -40,9 +44,7 @@ export default class PhadeBlock {
                     if (this.disableContainer) {
                         this.container.style.opacity = (1 - this.runtime / this.durationOut).toString();
                     }
-                    else {
-                        this.mainElement.style.opacity = (1 - this.runtime / this.durationOut).toString();
-                    }
+                    this.mainElement.style.opacity = (1 - this.runtime / this.durationOut).toString();
                 }
                 break;
         }
@@ -50,6 +52,7 @@ export default class PhadeBlock {
     }
     // ENABLE THE COMPONENT
     Enable(full = false) {
+        this.enableContainer = full;
         if (full)
             this.container.style.display = "block";
         this.mainElement.style.display = "flex";
@@ -58,8 +61,7 @@ export default class PhadeBlock {
     }
     // DISABLE THE COMPONENT
     Disable(full = false) {
-        if (full)
-            this.disableContainer = true;
+        this.disableContainer = full;
         this.runtime = 0;
         this.phase = PhadePhase.Out;
     }

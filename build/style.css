@@ -1,24 +1,7 @@
 
 
-body::before {
-    background-image: url("assets/marble.jpg");
-    content: "";
-    position: absolute;
-    left: 0; top: 0; right: 0; bottom: 0;
-    margin: auto;
-    background-color: var(--mainColor);
-    opacity: 0.15;
-    background-size: 100% 100%;
-    pointer-events: none;
-}
+
 /* LOADER */
-#menu-container {
-    position: absolute;
-    left: 0; top: 0; right: 0; bottom: 0;
-    margin: auto;
-    width: 100%; height: 100%;
-    z-index: 100;
-}
 
 #loader-widget {
     position: absolute;
@@ -66,50 +49,246 @@ h1 {
     font-weight: bold;
     animation: blinkingContinue 1.2s steps(5, start) infinite;
 }
-@keyframes blinkingContinue {
-    to {visibility: hidden;}
-}
-@keyframes slideLeft {
-    from {transform: translateX(var(--borderWidth));}
-    to {transform: translateX(0vw);}
-}
-@keyframes slideRight {
-    from {transform: translateX(calc(-1*var(--borderWidth)));}
-    to {transform: translateX(0vw);}
-}
-
-#main-menu {
-    display: flex;
+#title-card {
+    display: none;
     opacity: 0;
     position: absolute;
     left: 0; top: 0; right: 0; bottom: 0;
     margin: auto;
-    z-index: 150;
+    width: 100%; height: 100%;
+    z-index: 500;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: 1.4em;
 }
-#main-menu button {
+#title-intro {
+    font-family: Arial, Helvetica, sans-serif;
+    font-variant: small-caps;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-align: center;
+    color: var(--mainColor);
+    margin-bottom: 1.2em;
+    opacity: 0.8;
+    user-select: none;
+}
+#title-container {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+#line-tester {
+    position: absolute;
+    visibility: hidden;
+    left: 0;
+}
+#title-container span {
+    margin: 0; padding: 0 10%;
+    font-family: GreatVibes;
+    font-size: 3.5em;
+    font-weight: 500;
+    color: var(--mainColor);
+    user-select: none;
+}
+.title-line {
+    mask-repeat: no-repeat;
+    mask-image: linear-gradient(
+        to right, rgba(0, 0, 0, 1) 90%, rgba(0, 0, 0, 0)
+    );
+    mask-size: 0%;
+    animation-fill-mode: forwards;
+    animation-timing-function: linear;
+}
+
+
+.exit-button {
+    user-select: none;
+    position: absolute;
+    font-size: 1em;
+    top: 0.5em; right: 1em;
+    width: 1.4em; height: 1.4em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    font-family: monospace;
+}
+.exit-button:hover, .exit-button:active {
+    font-weight: bold;
+    background-color: lightgrey;
+    cursor: pointer;
+}
+
+#album-selector {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0; bottom: 0; left: 0; right: 0;
+    margin: auto;
+    z-index: 150;
+    background-color: white;
+    width: 90vh; height: fit-content;
+    max-width: 90vw; max-height: 90vh;
+    border: calc(var(--borderWidth) * 0.5) solid var(--mainColor);    
+    padding: 1em 2em;
+    box-sizing: border-box;
+    font-size: 0.9em;
+}
+#album-selector h2 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-variant: small-caps;
+    font-size: 1.15em;
+    font-weight: bold;
+    text-align: center;
+    color: var(--mainColor);
+}
+#album-selector p {
+    font-size: 0.9em;
+    margin: 0.5em 0 0;
+    opacity: 0.9;
+}
+
+#album-selector > button {
     font-family: Arial, Helvetica, sans-serif;
     font-variant: small-caps;
     font-weight: bold;
-    text-shadow:
-            -1px -1px 0 grey,  
-            1px -1px 0 grey,
-            -1px 1px 0 grey,
-            1px 1px 0 grey;
-    color: var(--mainColor);
-    margin: 0.25em;
-}
-#info-button {
-    font-variant: normal !important;
-    font-size: 0.90em;
-    border: solid 0.15em var(--mainColor);
-    border-radius: 50%;
-    width: 1.8ch;
-    height: 1.8ch;
     text-align: center;
+    color: black;
+    filter: var(--filter);
+    font-size: 1.1em;
+    margin: 0 0 1em;
+}
+
+
+@media (min-aspect-ratio: 1.2/1){
+    #album-selector {
+        width: 70vw;
+        height: 70vw;
+        font-size: 1em;
+    }
+}
+
+
+#album-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-height: 80%;
+    height: 85%;
+    width: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin: 1.4em 0;
+}
+.album-item {
+    position: relative;
+    width: 85%;
+    min-height: 100px;
+    margin: 0.3em; padding: 0.8em;
+    gap: 0.5em;
+    border-radius: 0.5em;
+    border-width: 0.2em;
+    border-color: var(--greyColor);
+    border-style: solid;
+    background-color: var(--greyColor);
+    display: grid;
+    align-items: center;
+    justify-items: end;
+    grid-template-areas: 
+        "album-cover album-title album-modify-buttons"
+        "album-cover album-description album-description"
+        "album-cover album-select-button album-select-button";
+}
+
+
+.album-item:hover, .album-item.selected {
+    border-color: var(--mainColor);
+    cursor: pointer;
+    background-color: var(--mainColorLight);
+}
+
+.album-item h3 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-variant: small-caps;
+    font-size: 1em;
+    font-weight: bold;
+    text-align: left;
+    color: var(--mainColor);
+    grid-area: album-title;
+}
+.album-item p {
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: justify;
+    grid-area: album-description;
+}
+.album-item img {
+    height: 6em;
+    grid-area: album-cover;
+    border-radius: 0.5em;
+    align-self: start;
+}
+.album-item button {
+    grid-area: album-select-button;
+    margin: 0;
+    display: flex;
+    justify-content: flex-end;
+    font-family: Arial, Helvetica, sans-serif;
+    font-variant: small-caps;
+    font-weight: bold;
+    background-color: var(--darkGreyColor);
+    color: var(--greyColor);
+    padding: 0.1em 1em;
+    border-radius: 0.25em;
+}
+.album-item:hover button, .album-item.selected button {
+    background-color: var(--mainColor);
+    color: white;
+}
+
+#create-new-album {
+    width: 85%;
+    margin: 0.3em;
+    display: grid;
+    justify-content: start;
+}
+#create-new-album-button {
+    padding: 0.8em;
+    margin-left: -1em;
+    gap: 0.8em;
+    border-radius: 0.5em;
+    border-width: 0.2em;
+    border-color: var(--greyColor);
+    border-style: solid;
+    background-color: var(--greyColor);
+    display: flex;
+    align-items: center;
+}
+#create-new-album-button img {
+    height: 1em;
+    filter: var(--greyFilter);
+
+}
+#create-new-album-button h4 {
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    font-variant: small-caps;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: left;
+    filter: var(--greyFilter);
+
+}
+#create-new-album-button:hover {
+    border-color: var(--mainColor);
+    background-color: var(--mainColorLight);
+    cursor: pointer;
+}
+#create-new-album-button:hover img, #create-new-album-button:hover h4 {
+    filter: var(--filter);
 }
 
 

@@ -49,6 +49,13 @@ export default class Angler implements InteractiveModule {
         }
     }
 
+    // Reset all props to base values
+    public Reset():void {
+        this.widgetAngle = 0;
+        this.position = 1;
+        this.facets = 1;
+    }
+
     // Constructor
     constructor(canvas: HTMLCanvasElement, kaleidoscope: Kaleidoscope, parent: Mangerie, sound: HTMLAudioElement){
         this.parent = parent;

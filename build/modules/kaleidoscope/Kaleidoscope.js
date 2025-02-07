@@ -4,6 +4,9 @@ import Rotator from "./Rotator.js";
 import { easeInOut } from "../Helpers.js";
 import GroundDisc from "./GroundDisc.js";
 export default class Kaleidoscope {
+    set PictureBook(pictureBook) {
+        this.imageSelector.PictureBook = pictureBook;
+    }
     get KaleidoscopeRadius() { return this.kaleidoscopeRadius; }
     get RotatorRadius() { return this.rotatorRadius; }
     get AnglerRadius() { return this.anglerRadius; }
@@ -71,7 +74,7 @@ export default class Kaleidoscope {
         const imageCanvas = document.createElement("canvas");
         imageCanvas.setAttribute("id", "image-canvas");
         container.appendChild(imageCanvas);
-        this.imageSelector = new GroundDisc(imageCanvas, this.kaleidoscope, mangerie.pictures.content);
+        this.imageSelector = new GroundDisc(imageCanvas, this.kaleidoscope);
         this.modules.push(this.imageSelector);
         // Give all canvas elements their proper size
         let canvasCollection = document.querySelectorAll("canvas");
@@ -119,7 +122,7 @@ export default class Kaleidoscope {
             this.Release();
         });
         // Create event listeners: mouse wheel (for angler)
-        window.addEventListener("wheel", (e) => {
+        container.addEventListener("wheel", (e) => {
             e.preventDefault();
             if (this.interactionAllowed) {
                 if (e.deltaY > 0) {
@@ -161,20 +164,20 @@ export default class Kaleidoscope {
                 this.ResetKaleidoscope(1);
             }
         });
-        // Recalculate all canvas elements when resizing
         window.addEventListener("resize", () => {
-            // Set interface values: if viewed on mobile, interface elements should be larger
-            let isMobile = window.innerWidth < 600;
-            this.kaleidoscopeRadius = isMobile ? 0.32 : 0.35;
-            this.rotatorRadius = isMobile ? 0.0275 : 0.02;
-            this.anglerRadius = isMobile ? 0.0075 : 0.0075;
-            for (let module of this.modules) {
-                module.Resize();
-            }
+            this.Resize();
         });
         this.interactionAllowed = false;
     }
     // EVENT METHODS
+    // Resizer: correct interface every time screen is resized (else canvas elements remain stuck)
+    Resize() {
+        const isMobile = window.innerWidth < 600;
+        this.kaleidoscopeRadius = isMobile ? 0.32 : 0.35;
+        this.rotatorRadius = isMobile ? 0.0275 : 0.02;
+        this.anglerRadius = isMobile ? 0.0075 : 0.0075;
+        this.modules.forEach((module) => module.Resize());
+    }
     // Called when touching main canvas
     ClickHandler(mouseX, mouseY) {
         for (let elem of this.interactors) {
@@ -225,6 +228,7 @@ export default class Kaleidoscope {
         // If direction is 0 (only on first load), run last half of the image animation
         if (direction == 0) {
             this.usedBudget = 0.5;
+            this.direction = direction;
             // Otherwise presume image switch animation: reset all parameters
         }
         else {

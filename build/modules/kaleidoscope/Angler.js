@@ -29,6 +29,12 @@ export default class Angler {
             this.clickSound.play();
         }
     }
+    // Reset all props to base values
+    Reset() {
+        this.widgetAngle = 0;
+        this.position = 1;
+        this.facets = 1;
+    }
     // Constructor
     constructor(canvas, kaleidoscope, parent, sound) {
         // Geometry & Interface

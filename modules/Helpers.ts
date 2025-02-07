@@ -1,3 +1,18 @@
+import { IAlbum } from "./Interfaces.js";
+
+// Helper function: fetch photo album from json
+export async function getJSON(path: string): Promise<IAlbum | null>{
+    try {
+        const response = await fetch(path);
+        if (!response.ok) throw new Error(`JSON response not ok for ${path}`);
+
+        const json : Promise<IAlbum> = await response.json();
+        return json;
+    } catch(error) { 
+        console.log(error); 
+        return null;
+    }
+}
 
 // Helper function: calculate angle based on cartesian coordinates
 export function getAngle(x: number, y: number, centerX: number, centerY: number): number {
@@ -24,6 +39,7 @@ export function easeInOut(x: number): number {
     return x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
 }
 
+// Helper class for geometry
 export class Point {
     // Cartesian coordinates
     public x: number;
@@ -70,6 +86,8 @@ export class Point {
         this.GoCartesian();
     }
 }
+
+// Helper class for geometry
 export class Polygon {
     private points: Point[];
     public get Points(): Point[] {

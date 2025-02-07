@@ -14,7 +14,7 @@ export default class TutorialBlock extends PhadeBlock implements Block {
 
     // CONSTRUCTOR
     constructor(mangerie: Mangerie){
-        const container: HTMLDialogElement = document.getElementById("tutorial") as HTMLDialogElement;
+        const container: HTMLElement = document.getElementById("tutorial")!;
         super(mangerie, container, container);
 
         this.articles = [];
@@ -41,9 +41,10 @@ export default class TutorialBlock extends PhadeBlock implements Block {
 
             const next = this.Next.bind(this);
             if (next()){
+                localStorage.setItem("firstTime", "false");
                 const disable = this.Disable.bind(this);
                 disable();
-                // this.mangerie.SetState(GameState.Playing);
+                this.mangerie.SetState(GameState.Playing);
             }
         });
     }
@@ -57,6 +58,15 @@ export default class TutorialBlock extends PhadeBlock implements Block {
         this.currentArticle = this.articles[this.step];
         this.previousArticle.Disable();
         return false;
+    }
+
+    public Reset(): void {
+        this.step = 0;
+        this.currentArticle = this.articles[0];
+        for (let article of this.articles){
+            article.Reset();
+        }
+        this.start = true;
     }
 
     // UPDATE IMPLEMENTATION: ADD SWITCHING ANIMATION

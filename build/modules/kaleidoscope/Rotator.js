@@ -11,6 +11,11 @@ export default class Rotator {
         this.kaleidoscope.Angle = this.angle;
         this.PlaySound();
     }
+    // Reset all props to base values
+    Reset() {
+        this.angle = 0;
+        this.circleWidth = this.parent.RotatorRadius;
+    }
     // Constructor
     constructor(canvas, kaleidoscope, parent, sounds) {
         // Main logic: applies rotation to kaleidoscope image

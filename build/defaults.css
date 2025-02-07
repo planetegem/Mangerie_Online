@@ -1,16 +1,43 @@
 :root {
     --mainColor: #395e5e;
+    --mainColorLight: #395e5e2a;
+    --greyColor: rgb(245, 245, 245);
+    --darkGreyColor: rgb(172, 172, 172);
+    --greyFilter: invert(81%) sepia(0%) saturate(0%) hue-rotate(189deg) brightness(85%) contrast(91%);
     --filter: invert(35%) sepia(27%) saturate(484%) hue-rotate(131deg) brightness(89%) contrast(94%);
     --filterActive: invert(35%) sepia(27%) saturate(484%) hue-rotate(131deg) brightness(66%) contrast(94%);
     --borderWidth: min(2.5vw, 2vh);
     --mainPadding: min(10vw, 5vh);
     --fontSize: min(4vw, 2.5vh);
 }
-h1, h2, h3, h4, h5, a, button, p, span {
+h1, h2, h3, h4, h5, a, button, p, span, ul, li {
     all: unset;
+}
+::selection {
+    background-color: var(--mainColor);
+    color: white;
 }
 body {
     font-size: var(--fontSize);
     background-color: white;
     margin: 0; padding: 0;
+}
+body::before {
+    background-image: url("assets/marble.jpg");
+    content: "";
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    margin: auto;
+    background-color: var(--mainColor);
+    opacity: 0.15;
+    background-size: 100% 100%;
+    pointer-events: none;
+}
+
+@keyframes blinkingContinue {
+    to {visibility: hidden;}
+}
+@font-face {
+    font-family: GreatVibes;
+    src: url(assets/GreatVibes-Regular.woff);
 }

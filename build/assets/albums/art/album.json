@@ -1,0 +1,63 @@
+{
+    "title": "Art in Nudity and Nudity in Art",
+    "description": "Essentially, art is a form of nudity: it bares the souls of innocents and perverts alike. Explore the theme in this wonderful collection of classical art!",
+    "cover": "",
+    "images": [
+        {
+            "desc": "Athenian Red-figure Kylix - attributed to Dokimasia Painter (ca 480 BC)", 
+            "src": "assets/albums/art/dokimasia.jpg"
+        }
+        ,
+        {
+            "desc": "Pan copulating with a Goat - Unknown Artist (1st century AD)", 
+            "src": "assets/albums/art/pan.jpg"
+        }
+        ,
+        {
+            "desc": "La Fornarina - Raphael (1518-1519)", 
+            "src": "assets/albums/art/fornarina.jpg"
+        }
+        ,
+        {
+            "desc": "Venus and Cupid - Lucas Cranach the Elder (ca 1525)", 
+            "src": "assets/albums/art/cupid-cranach.jpg"
+        }
+        ,
+        {
+            "desc": "Victorious Cupid - Caravaggio (1602)", 
+            "src": "assets/albums/art/amor.jpg"
+        }
+        ,
+        {
+            "desc": "Susanna and the Elders - Artemisia Gentileschi (1610)", 
+            "src": "assets/albums/art/susanna.jpg"
+        }
+        ,
+        {
+            "desc": "Study of a Nude Man - follower of Pierre Guérin (ca 1810)", 
+            "src": "assets/albums/art/nude-golf.jpg"
+        }
+        ,
+        {
+            "desc": "Dream of the Fisherman's Wife - Katsushika Hokusai (1814)", 
+            "src": "assets/albums/art/fisherman-wife.jpg"
+        }
+        ,
+        
+        {
+            "desc": "Study of a Nude Man - Gustave Courbet (1839)", 
+            "src": "assets/albums/art/study-courbet.jpg"
+        }
+        ,
+        {
+            "desc": "L'Origine du Monde - Gustave Courbet (1866)", 
+            "src": "assets/albums/art/origine-du-monde.jpg"
+        }
+        ,
+        {
+            "desc": "Pornokratès - Félicien Rops (1878)", 
+            "src": "assets/albums/art/pornokrates.jpg"
+        }
+
+    ]
+}

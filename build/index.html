@@ -75,32 +75,81 @@
         <!-- END OF COMMENT -->
 
         <link rel="stylesheet" href="defaults.css">
+        <link rel="stylesheet" href="menu.css">
         <link rel="stylesheet" href="kaleidoscope.css">
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="tutorial.css">
+
+
     </head>
     <body>
-        <section id="menu-container">
-            <img src="assets/recycle.svg" id="loader-widget" alt="Loading...">
-            <header id="welcome-text">
-                <h1>Welcome to Mangerie Online!</h1>
-                <p>
-                    Let's take a trip down memory lane with Mangerie Online, 
-                    your very own digital kaleidoscope.
-                </p>
-                <p>
-                    Create albums of your favorite pictures and
-                    bring out their true kaleidoscopic splendour by twisting and turning the levers on your kaleidoscope. 
-                </p>
-                <span>-- click/tap to get started --</span>
-            </header>
-            <nav id="main-menu">
-                <img src="assets/mangerie_logo.webp" id="menu-logo" alt="Mangeire, the logo">
-                <button id="start-button">start</button>
-                <button id="album-button">select album</button>
-                <button id="info-button">?</button>
-            </nav>
+        <!-- LOADING WIDGET -->
+        <img src="assets/recycle.svg" id="loader-widget" alt="Loading...">
+
+        <!-- HEADER = WELCOME TO MANGERIE -->
+        <header id="welcome-text">
+            <h1>Welcome to Mangerie Online!</h1>
+            <p>
+                Let's take a trip down memory lane with Mangerie Online, 
+                your very own digital kaleidoscope.
+            </p>
+            <p>
+                Create albums of your favorite pictures and
+                bring out their true kaleidoscopic splendour by twisting and turning the levers on your kaleidoscope. 
+            </p>
+            <span>-- click/tap to get started --</span>
+        </header>
+
+        <!-- MAIN MENU: START PLAYING, SELECT ALBUM OR ACCESS INFO FOOTER -->
+        <nav id="main-menu">
+            <figure id="menu-logo">
+                <img data-src="assets/mangerie.webp" id="base-image" alt="Mangerie, the logo">
+                <img data-src="assets/mangerie-online.webp" id="online-deco" alt="Mangerie, the logo">
+            </figure>
+            <div id="menu-buttons">
+                <button id="start-button" class="menu-button">
+                    <img class="left-arrow" src="assets/triangle.svg">
+                    <span>start</span>
+                    <img class="right-arrow" src="assets/triangle.svg">
+                </button>
+                <button id="album-button" class="menu-button">
+                    <img class="left-arrow" src="assets/triangle.svg">
+                    <span>select album</span>
+                    <img class="right-arrow" src="assets/triangle.svg">
+                </button>
+                <button id="info-button">i</button>
+            </div>
+        </nav>
+
+        <!-- SELECT WHICH ALBUM TO VIEW IN THE KALEIDOSCOPE -->
+        <aside id="album-selector" class="menu-modal">
+            <span id="exit-album-selector" class="exit-button">X</span>
+            <h2>Album Selector</h2>
+            <p>
+                Select a photo album to view in the Mangerie kaleidoscope.
+            </p>
+            <ul id="album-list" class="modal-list">
+                <li id="create-new-album">
+                    <button id="create-new-album-button">
+                        <img src="assets/plus.svg">
+                        <h4>create new</h4>
+                    </button>
+                </li>
+            </ul>
+            <button id="exit-album-button" class="menu-button">
+                <img class="left-arrow" src="assets/triangle.svg">
+                <span>return to menu</span>
+                <img class="right-arrow" src="assets/triangle.svg">
+            </button>
+        </aside>
+
+        <!-- TITLE CARD -->
+        <section id="title-card">
+            <span id="title-intro">now viewing</span>
+            <div id="title-container"></div>
         </section>
+
+        <!-- MAIN SECTION: KALEIDOSCOPE, KALEIDOSCOPE CONTROLS, TUTORIAL -->
         <main id="kaleidoscope-container">
             <section id="kaleidoscope">
                 <nav id="tutorial-button-container" class="game-button">
@@ -138,67 +187,92 @@
                     </h2>
                     <p>
                         Your browser's local storage says that this is your first time playing, 
-                        so please enjoy a short tutorial to learn how to operate the kaleidoscope.
+                        so please enjoy a short tutorial where you will learn how to operate a kaleidoscope.
                         <br>
                         <br>
                         If you need to review these instructions, 
-                        you can  restart this tutorial at any time with the button shaped like a question mark.
+                        you can restart this tutorial at any time with the button shaped like a question mark.
                     </p>
                 </article>
                 <article class="tutorial-screen">
-                    <img src="assets/tutorial/angler_tutorial.webp" alt="How to angle the kaleidoscope mirrors">
+                    <img data-src="assets/tutorial/image_tutorial.webp" alt="How to switch images in the kaleidoscope">
                     <p>
-                        Welcome to Mangerie Online, your online kaleidoscope!
+                        The kaleidoscope starts from a base image which is reflected into symmetrical patterns.
                         <br>
-                        To start playing, pull on the large lever of the kaleidoscope. 
-                        This will influence its internal mirrors, adjusting their angles to create more facets.
-                        You can also use the mouse wheel to interact with the lever.
+                        You can circle through images by using the large, outside arrow controls.
+                        Alternatively, you can also use the arrow keys on your keyboard.
                     </p>
                 </article>
                 <article class="tutorial-screen">
-                    <img src="assets/tutorial/rotator_tutorial.webp" alt="How to rotate the kaleidoscope image">
                     <p>
-                        After angling the mirrors, you can start rotating the base image to achieve true kaleidoscopic splendor!
-                        Do this by tugging on the arrowed lever, or simply on the edge of the circle will work as well.
+                        A short description of the image pops up when the switch is complete.
+                        Simply start interacting with the kaleidoscope to close this description.
+                        <br>
+                        Switching images always resets image rotation and number of reflections.
                     </p>
                 </article>
-
-                <!--
-                <div id="tutorial-container">
-                    <article>
-                        <img src="assets/tutorial/angler_tutorial.webp" alt="How to angle the kaleidoscope mirrors">
-                        <p>
-                            Welcome to Mangerie Online, your online kaleidoscope!
-                            <br>
-                            To start playing, pull on the large lever of the kaleidoscope. 
-                            This will influence its internal mirrors, adjusting their angles to create more facets.
-                            You can also use the mouse wheel to interact with the lever.
-                        </p>
-                        <h3>(tutorial 1/3)</h3>
-                    </article>
-                    <article>
-                        <img src="assets/tutorial/rotator_tutorial.webp" alt="How to rotate the kaleidoscope image">
-                        <p>
-                            After angling the mirrors, you can start rotating the base image to achieve true kaleidoscopic splendor!
-                            Do this by tugging on the arrowed lever, or simply on the edge of the circle will work as well.
-                        </p>
-                        <h3>(instruction 2/3)</h3>
-                    </article>
-                    <article>
-                        <img src="assets/tutorial/image_tutorial.webp" alt="How to swicth images in the kaleidoscope">
-                        <p>
-                            Finally, you can switch the base image in the kaleidoscope by pressing one of the arrow buttons.
-                            Alternatively, you can also use the arrow keys on your keyboard,
-                            or tinder your brains out by swiping left or right.
-                            <br>
-                            Have Fun!
-                        </p>
-                        <h3>(instruction 3/3)</h3>
-                    </article>
-                </div>
-            -->
+                <article class="tutorial-screen">
+                    <img data-src="assets/tutorial/angler_tutorial.webp" alt="How to angle the kaleidoscope mirrors">
+                    <p>
+                        Next, start pulling on the large circular lever to reveal the kaleidoscopic splendour of an image.
+                        <br>
+                        The farther the lever is pulled, the sharper the angle of the kaleidoscope's internal mirrors, 
+                        i.e. more facets being combined into a new image.
+                    </p>
+                </article>
+                <article class="tutorial-screen">
+                    <p>
+                        <u>Tip</u>: pull hard enough on the lever. You need to pass a certain treshold of force to get the kaleidoscope's mirrors to flip positions!
+                        As a shortcut, you can also use the mouse wheel to interact with the lever. 
+                        This way the lever is always flipped into a valid position.
+                    </p>
+                </article>
+                <article class="tutorial-screen">
+                    <img data-src="assets/tutorial/rotator_tutorial.webp" alt="How to rotate the kaleidoscope image">
+                    <p>
+                        Finally, you can rotate the base image to bring out some truly unpredictable combinations!
+                        Do this by tugging on the arrowed lever. Dragging the edge of the circle will work as well.
+                    </p>
+                </article>
+                <article class="tutorial-screen">
+                    <p>
+                        Have fun, and don't forget to have a look at the other image albums available in the main menu.
+                        Memories are precious after all!
+                    </p>
+                </article>
             </section>
         </main>
+        
+        <!-- GENERAL INFO WITH FOOTER -->
+        <aside id="info-text" class="menu-modal">
+            <span id="exit-info" class="exit-button">X</span>
+            <h2>Context</h2>
+            <p>
+                Mangerie Online is a digital toy halfway between a View-Master and a kaleidoscope.
+            </p>
+            <p>
+                The idea to make this came from a visit to the 
+                <a href="https://www.kyoto-museums.jp/en/museum/central/3799/" target="_blank">Kaleidosocope Museum of Kyoto</a>,
+                a museum that I woleheartedly recommend visiting. 
+                Their collection - clearly a work of genuine love and passion, - first challenged me to make a digital simulacrum of a kaleidoscope.
+            </p>
+            <p>
+                The View-Master component came when I was playing around with Dall-E: 
+                I had collected quite a few images which seemed to tell a story - simply too fun not to integrate as a photo album in the kaleidoscope.
+            </p>
+            <p>
+                A first version of Mangerie was built in C#, but I switched over to Typescript for the online version.
+                Its source code is available on <a href="https://github.com/planetegem/Mangerie_Online" target="_blank">github</a>.
+            </p>
+            <button id="exit-info-button" class="menu-button">
+                <img class="left-arrow" src="assets/triangle.svg">
+                <span>return to menu</span>
+                <img class="right-arrow" src="assets/triangle.svg">
+            </button>
+            <footer>
+                <p>&#169; 2025 Niels Van Damme | <a href="https://www.planetegem.be" style="text-decoration:none;color:black;font-weight:normal;">https://www.planetegem.be</a> | <a href="https://www.instagram.com/planetegem/" style="text-decoration:none;color:black;font-weight:normal;">www.instagram.com/planetegem</a></p>
+            </footer>
+        </aside>
 
         <!-- SOUND ELEMENTS ARE ADDED HERE DURING LOADING-->
         <section id="utility-box" style="display:none;"></section>        

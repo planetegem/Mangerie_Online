@@ -2,8 +2,10 @@ export enum GameState {
     Loading = 0,
     Welcome,
     Menu,
-    Starting,
-    Complete,
+    Album,
+    Info,
+    Titlecard,
+    StartGame,
     Tutorial,
     Playing
 }

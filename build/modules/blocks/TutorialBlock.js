@@ -1,4 +1,4 @@
-import { PhadePhase } from "../Enums.js";
+import { GameState, PhadePhase } from "../Enums.js";
 import PhadeBlock from "./PhadeBlock.js";
 import PhadeModal from "./PhadeModal.js";
 export default class TutorialBlock extends PhadeBlock {
@@ -30,9 +30,10 @@ export default class TutorialBlock extends PhadeBlock {
                 return;
             const next = this.Next.bind(this);
             if (next()) {
+                localStorage.setItem("firstTime", "false");
                 const disable = this.Disable.bind(this);
                 disable();
-                // this.mangerie.SetState(GameState.Playing);
+                this.mangerie.SetState(GameState.Playing);
             }
         });
     }
@@ -44,6 +45,14 @@ export default class TutorialBlock extends PhadeBlock {
         this.currentArticle = this.articles[this.step];
         this.previousArticle.Disable();
         return false;
+    }
+    Reset() {
+        this.step = 0;
+        this.currentArticle = this.articles[0];
+        for (let article of this.articles) {
+            article.Reset();
+        }
+        this.start = true;
     }
     // UPDATE IMPLEMENTATION: ADD SWITCHING ANIMATION
     Update(delta) {

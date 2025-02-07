@@ -24,7 +24,12 @@ export default class Rotator implements InteractiveModule {
         this.kaleidoscope.Angle = this.angle;
         this.PlaySound();
     }
-    
+    // Reset all props to base values
+    public Reset():void {
+        this.angle = 0;
+        this.circleWidth = this.parent.RotatorRadius;
+    }
+
     // Constructor
     constructor (canvas: HTMLCanvasElement, kaleidoscope: Kaleidoscope, parent: Mangerie, sounds: HTMLAudioElement[]){
         this.parent = parent;

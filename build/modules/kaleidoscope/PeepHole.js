@@ -3,6 +3,7 @@
 export default class PeepHole {
     set Image(img) {
         this.image = img;
+        this.CropImage();
     }
     set Angle(angle) {
         this.angle = angle;
@@ -31,10 +32,43 @@ export default class PeepHole {
         // Geometry properties
         this.cWidth = 0;
         this.cHeight = 0;
+        // Image cropping
+        this.xMargin = 0;
+        this.yMargin = 0;
+        this.imgWidth = 0;
+        this.imgHeight = 0;
         this.canvas = canvas;
         this.sketchCanvas = document.createElement("canvas");
         this.radius = parent.KaleidoscopeRadius;
         this.Resize();
+    }
+    // Reset all props to base values
+    Reset() {
+        this.angle = 0;
+        this.mirror = 2 * Math.PI;
+        this.facets = 1;
+        this.translation = -1;
+    }
+    CropImage() {
+        let width = this.image.naturalWidth, height = this.image.naturalHeight;
+        if (width > height) {
+            this.imgHeight = this.cHeight;
+            this.imgWidth = this.cHeight * (width / height);
+            this.xMargin = -(this.imgWidth - this.imgHeight) / 2;
+            this.yMargin = 0;
+        }
+        else if (height > width) {
+            this.imgWidth = this.cWidth;
+            this.imgHeight = this.cWidth * (height / width);
+            this.yMargin = -(this.imgHeight - this.imgWidth) / 2;
+            this.xMargin = 0;
+        }
+        else {
+            this.imgWidth = this.cWidth;
+            this.imgHeight = this.cHeight;
+            this.xMargin = 0;
+            this.yMargin = 0;
+        }
     }
     // Main functions
     Resize() {
@@ -44,6 +78,7 @@ export default class PeepHole {
         this.cHeight = this.canvas.height;
         this.sketchCanvas.setAttribute("width", this.cWidth.toString());
         this.sketchCanvas.setAttribute("height", this.cHeight.toString());
+        this.CropImage();
     }
     Draw() {
         if (this.canvas === null) {
@@ -61,7 +96,7 @@ export default class PeepHole {
                 ctx.translate(this.cWidth * 0.5, this.cHeight * 0.5);
                 ctx.rotate(this.angle);
                 ctx.translate(-this.cWidth * 0.5, -this.cHeight * 0.5);
-                ctx.drawImage(this.image, 0, 0, this.cWidth, this.cHeight);
+                ctx.drawImage(this.image, this.xMargin, this.yMargin, this.imgWidth, this.imgHeight);
                 ctx.restore();
                 if (this.facets > 1) {
                     ctx.save();
@@ -73,7 +108,7 @@ export default class PeepHole {
                     ctx.scale(-1, 1);
                     ctx.rotate(this.angle);
                     ctx.translate(-this.cWidth * 0.5, -this.cHeight * 0.5);
-                    ctx.drawImage(this.image, 0, 0, this.cWidth, this.cHeight);
+                    ctx.drawImage(this.image, this.xMargin, this.yMargin, this.imgWidth, this.imgHeight);
                     ctx.restore();
                 }
                 final.clearRect(0, 0, this.cWidth, this.cHeight);
