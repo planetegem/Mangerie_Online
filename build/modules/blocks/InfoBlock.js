@@ -3,7 +3,7 @@ import PhadeBlock from "./PhadeBlock.js";
 export default class InfoBlock extends PhadeBlock {
     constructor(mangerie) {
         const element = document.getElementById("info-text");
-        super(mangerie, element, element);
+        super(mangerie, element);
         // HTML Elements
         this.closeButton = document.getElementById("exit-info");
         this.closeButton2 = document.getElementById("exit-info-button");

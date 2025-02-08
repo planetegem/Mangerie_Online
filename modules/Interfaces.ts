@@ -15,10 +15,12 @@ export interface Dragger {
     active: boolean;
     object: InteractiveModule | null;
 }
+
+// BLOCK: USED TO NAVIGATE BETWEEN STATES
 export interface Block {
-    Enable(full?: boolean): void;
+    Enable(): void;
     Update(delta: number): PhadePhase;
-    Disable(full?: boolean): void;
+    Disable(): void;
 }
 
 // GENERALIZED ASSET OBJECT

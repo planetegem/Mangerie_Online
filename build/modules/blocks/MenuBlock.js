@@ -1,12 +1,23 @@
 import { GameState, PhadePhase } from "../Enums.js";
 import PhadeBlock from "./PhadeBlock.js";
 export default class MenuBlock extends PhadeBlock {
+    // OVERRIDE ENABLE AND DISABLE METHODS (FOR STATE SWITCHING WITHOUT REAL DISABLE)
+    Disable() {
+        this.enabled = false;
+        super.Disable();
+    }
+    Enable() {
+        if (!this.enabled)
+            super.Enable();
+    }
+    // CONSTRUCTOR: ADD EVENT LISTENERS
     constructor(mangerie) {
         const menu = document.getElementById("main-menu");
-        super(mangerie, menu, menu);
+        super(mangerie, menu);
         // STATE MEMORY
         this.startingGame = false;
         this.fading = true;
+        this.enabled = false;
         // MENU BUTTONS
         this.start = document.getElementById("start-button");
         this.album = document.getElementById("album-button");
@@ -25,13 +36,13 @@ export default class MenuBlock extends PhadeBlock {
             if (this.phase != PhadePhase.Hold)
                 return;
             const disable = this.Disable.bind(this);
-            disable(true);
+            disable();
             this.startingGame = true;
         });
         this.album.addEventListener("click", () => {
             if (this.phase != PhadePhase.Hold)
                 return;
-            this.mangerie.SetState(GameState.Album);
+            this.mangerie.SetState(GameState.AlbumSelection);
         });
         this.info.addEventListener("click", () => {
             if (this.phase != PhadePhase.Hold)
@@ -39,6 +50,7 @@ export default class MenuBlock extends PhadeBlock {
             this.mangerie.SetState(GameState.Info);
         });
     }
+    // MAIN UPDATE FUNCTION: ANIMATE LOGO
     Update(delta) {
         const fader = this.Fade.bind(this);
         const state = fader(delta);

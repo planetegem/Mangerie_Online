@@ -89,10 +89,16 @@ export default class TitlecardBlock extends PhadeBlock implements Block {
         });
     }
 
+    // OVERRIDE ENABLE FUNCTION: set title after calling super.Enable to mka sure element has real width
+    public Enable(): void {
+        super.Enable();
+        this.Title = this.mangerie.CurrentAlbum.title;
+    }
+
     // CONSTRUCTOR: on resize, recalculate title lines and restart animations
     constructor(mangerie: Mangerie){
         const elem: HTMLElement = document.getElementById("title-card")!;
-        super(mangerie, elem, elem);
+        super(mangerie, elem);
         this.durationOut = 1000;
         this.harpSound = mangerie.sounds.content.get("harps")!.object;
 
@@ -124,7 +130,7 @@ export default class TitlecardBlock extends PhadeBlock implements Block {
                 if (this.customRuntime >= this.currentdelay + 1000){
                     this.customRuntime = 0;
                     const disable = this.Disable.bind(this);
-                    disable(true);
+                    disable();
                 }
                 break;
 
@@ -136,7 +142,7 @@ export default class TitlecardBlock extends PhadeBlock implements Block {
 
                 // Start game
                 if (this.customRuntime >= this.durationOut + this.finalPause)
-                    this.mangerie.SetState(GameState.StartGame);
+                    this.mangerie.SetState(GameState.Playing);
 
                 break;
         }

@@ -55,10 +55,15 @@ export default class TitlecardBlock extends PhadeBlock {
             this.currentdelay += this.textfadeTime * rel + 100;
         });
     }
+    // OVERRIDE ENABLE FUNCTION: set title after calling super.Enable to mka sure element has real width
+    Enable() {
+        super.Enable();
+        this.Title = this.mangerie.CurrentAlbum.title;
+    }
     // CONSTRUCTOR: on resize, recalculate title lines and restart animations
     constructor(mangerie) {
         const elem = document.getElementById("title-card");
-        super(mangerie, elem, elem);
+        super(mangerie, elem);
         // HTML Elements
         this.titleContainer = document.getElementById("title-container");
         this.titleIntro = document.getElementById("title-intro");
@@ -99,7 +104,7 @@ export default class TitlecardBlock extends PhadeBlock {
                 if (this.customRuntime >= this.currentdelay + 1000) {
                     this.customRuntime = 0;
                     const disable = this.Disable.bind(this);
-                    disable(true);
+                    disable();
                 }
                 break;
             case PhadePhase.Done:
@@ -109,7 +114,7 @@ export default class TitlecardBlock extends PhadeBlock {
                 this.harpSound.currentTime = 0;
                 // Start game
                 if (this.customRuntime >= this.durationOut + this.finalPause)
-                    this.mangerie.SetState(GameState.StartGame);
+                    this.mangerie.SetState(GameState.Playing);
                 break;
         }
         return state;

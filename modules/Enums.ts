@@ -2,12 +2,12 @@ export enum GameState {
     Loading = 0,
     Welcome,
     Menu,
-    Album,
+    AlbumSelection,
+    AlbumCreation,
     Info,
     Titlecard,
-    StartGame,
-    Tutorial,
-    Playing
+    Playing,
+    Tutorial
 }
 export enum PhadePhase {
     In = 1,

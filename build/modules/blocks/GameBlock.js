@@ -2,15 +2,16 @@ import { GameState, PhadePhase } from "../Enums.js";
 import Kaleidoscope from "../kaleidoscope/Kaleidoscope.js";
 export default class GameBlock extends Kaleidoscope {
     // CONSTRUCTOR
-    constructor(mangerie, container) {
+    constructor(mangerie) {
         super(mangerie);
+        this.enabled = false;
         // ANIMATION PROPERTIES
         this.phase = PhadePhase.In;
         this.runtime = 0;
         this.startFade = 1000;
         this.holdTime = 1500;
         this.mangerie = mangerie;
-        this.container = container;
+        this.container = document.getElementById("kaleidoscope-container");
         this.tutorialRequired = (localStorage.getItem("firstTime") == "true" || localStorage.getItem("firstTime") == null);
         document.getElementById("tutorial-button").addEventListener("click", () => {
             this.mangerie.SetState(GameState.Tutorial);
@@ -19,7 +20,15 @@ export default class GameBlock extends Kaleidoscope {
             this.Disable();
         });
     }
+    // CUSTOM ENABLE FUNCTION TO RESET KALEIDOSCOPE VALUES
     Enable() {
+        // If already enabled, return early
+        if (this.enabled)
+            return;
+        this.enabled = true;
+        // Fetch current photo album
+        this.PictureBook = this.mangerie.CurrentAlbum.content;
+        // Set animation props
         this.phase = PhadePhase.In;
         this.runtime = 0;
         // Reset kaleidoscope props
@@ -31,10 +40,13 @@ export default class GameBlock extends Kaleidoscope {
         });
         this.switchPlayed = false;
     }
+    // CUSTOM DISABLE METHOD
     Disable() {
         this.phase = PhadePhase.Out;
         this.runtime = 0;
+        this.enabled = false;
     }
+    // MAIN UPDATE FUNCTION
     Update(delta) {
         this.runtime += delta;
         switch (this.phase) {

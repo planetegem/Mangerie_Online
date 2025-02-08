@@ -8,6 +8,7 @@ export default class GameBlock extends Kaleidoscope implements Block {
     // FUNCTIONAL PROPERTIES
     protected mangerie: Mangerie;
     private tutorialRequired: boolean;
+    private enabled: boolean = false;
 
     // ANIMATION PROPERTIES
     private phase: PhadePhase = PhadePhase.In;
@@ -19,10 +20,10 @@ export default class GameBlock extends Kaleidoscope implements Block {
     private container: HTMLElement;
 
     // CONSTRUCTOR
-    constructor(mangerie: Mangerie, container: HTMLElement){
+    constructor(mangerie: Mangerie){
         super(mangerie);
         this.mangerie = mangerie;
-        this.container = container;
+        this.container = document.getElementById("kaleidoscope-container")!;
 
         this.tutorialRequired = (localStorage.getItem("firstTime") == "true" || localStorage.getItem("firstTime") == null);
 
@@ -35,7 +36,16 @@ export default class GameBlock extends Kaleidoscope implements Block {
 
     }
 
+    // CUSTOM ENABLE FUNCTION TO RESET KALEIDOSCOPE VALUES
     public Enable(): void {
+        // If already enabled, return early
+        if (this.enabled) return;
+        this.enabled = true;
+        
+        // Fetch current photo album
+        this.PictureBook = this.mangerie.CurrentAlbum.content;
+
+        // Set animation props
         this.phase = PhadePhase.In;
         this.runtime = 0;
 
@@ -48,12 +58,15 @@ export default class GameBlock extends Kaleidoscope implements Block {
         });
         this.switchPlayed = false;
     }
+
+    // CUSTOM DISABLE METHOD
     public Disable(): void {
         this.phase = PhadePhase.Out;
         this.runtime = 0;
+        this.enabled = false;
     }
 
-
+    // MAIN UPDATE FUNCTION
     public Update(delta: number): PhadePhase {
         this.runtime += delta;
 

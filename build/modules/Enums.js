@@ -3,12 +3,12 @@ export var GameState;
     GameState[GameState["Loading"] = 0] = "Loading";
     GameState[GameState["Welcome"] = 1] = "Welcome";
     GameState[GameState["Menu"] = 2] = "Menu";
-    GameState[GameState["Album"] = 3] = "Album";
-    GameState[GameState["Info"] = 4] = "Info";
-    GameState[GameState["Titlecard"] = 5] = "Titlecard";
-    GameState[GameState["StartGame"] = 6] = "StartGame";
-    GameState[GameState["Tutorial"] = 7] = "Tutorial";
-    GameState[GameState["Playing"] = 8] = "Playing";
+    GameState[GameState["AlbumSelection"] = 3] = "AlbumSelection";
+    GameState[GameState["AlbumCreation"] = 4] = "AlbumCreation";
+    GameState[GameState["Info"] = 5] = "Info";
+    GameState[GameState["Titlecard"] = 6] = "Titlecard";
+    GameState[GameState["Playing"] = 7] = "Playing";
+    GameState[GameState["Tutorial"] = 8] = "Tutorial";
 })(GameState || (GameState = {}));
 export var PhadePhase;
 (function (PhadePhase) {

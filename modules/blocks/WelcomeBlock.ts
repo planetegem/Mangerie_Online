@@ -8,7 +8,7 @@ export default class WelcomeBlock extends PhadeBlock implements Block {
     // CONSTRUCTOR
     constructor(mangerie: Mangerie){
         const welcome = document.getElementById("welcome-text")!;
-        super(mangerie, welcome, welcome);
+        super(mangerie, welcome);
 
         // OVERWRITE ANIMATION PROPERTIES
         this.durationIn = 300;

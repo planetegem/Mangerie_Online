@@ -8,6 +8,7 @@ export default class MenuBlock extends PhadeBlock implements Block {
     // STATE MEMORY
     private startingGame: boolean = false;
     private fading: boolean = true;
+    private enabled: boolean = false;
 
     // MENU BUTTONS
     private start: HTMLElement = document.getElementById("start-button")!;
@@ -21,9 +22,19 @@ export default class MenuBlock extends PhadeBlock implements Block {
     private buttonsDelay: number = 1500;
     private buttonsFade: number = 1000;
 
+    // OVERRIDE ENABLE AND DISABLE METHODS (FOR STATE SWITCHING WITHOUT REAL DISABLE)
+    public Disable(): void {
+        this.enabled = false;
+        super.Disable();
+    }
+    public Enable(): void {
+        if (!this.enabled) super.Enable();
+    }
+
+    // CONSTRUCTOR: ADD EVENT LISTENERS
     constructor(mangerie: Mangerie){
         const menu = document.getElementById("main-menu")!;
-        super(mangerie, menu, menu);
+        super(mangerie, menu);
 
         this.durationIn = 1000;
         this.durationOut = 1000;
@@ -35,12 +46,12 @@ export default class MenuBlock extends PhadeBlock implements Block {
             if (this.phase != PhadePhase.Hold) return;
 
             const disable = this.Disable.bind(this);
-            disable(true);
+            disable();
             this.startingGame = true;
         });
         this.album.addEventListener("click", () => {
             if (this.phase != PhadePhase.Hold) return;
-            this.mangerie.SetState(GameState.Album);
+            this.mangerie.SetState(GameState.AlbumSelection);
         });
         this.info.addEventListener("click", () => {
             if (this.phase != PhadePhase.Hold) return;
@@ -48,6 +59,7 @@ export default class MenuBlock extends PhadeBlock implements Block {
         });
     }
 
+    // MAIN UPDATE FUNCTION: ANIMATE LOGO
     public Update(delta: number): number {
         const fader = this.Fade.bind(this);
         const state: PhadePhase = fader(delta);

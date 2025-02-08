@@ -6,12 +6,14 @@ import PhotoAlbum from "./album/PhotoAlbum.js";
 export default class LoadingBlock extends PhadeBlock {
     // CONSTRUCTOR
     constructor(mangerie) {
-        const widget = document.getElementById("loader-widget");
-        super(mangerie, widget, widget);
+        const container = document.getElementById("loading-screen");
+        super(mangerie, container);
         // ANIMATION PROPERTIES
         this.minimumLoadTime = 750;
         this.rotationFactor = 0.4;
         this.loadtime = 0;
+        // HTML PROPS
+        this.widget = document.getElementById("loader-widget");
         // LOADING PROPS
         this.albumPaths = ["assets/albums/bodybuilders/album.json", "assets/albums/art/album.json"];
         this.loadingInProgress = true;
@@ -22,8 +24,8 @@ export default class LoadingBlock extends PhadeBlock {
         this.durationOut = 200;
     }
     // OVERRIDE ENABLE METHOD
-    Enable(full = false) {
-        super.Enable(full);
+    Enable() {
+        super.Enable();
         this.loadingInProgress = true;
         this.LoadAssets();
     }
@@ -116,7 +118,7 @@ export default class LoadingBlock extends PhadeBlock {
             this.Disable();
             this.mangerie.SetState(this.mangerie.former);
         }
-        this.mainElement.style.transform = "rotate(" + this.loadtime * this.rotationFactor + "deg)";
+        this.widget.style.transform = "rotate(" + this.loadtime * this.rotationFactor + "deg)";
         return state;
     }
 }

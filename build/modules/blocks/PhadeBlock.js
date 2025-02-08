@@ -1,7 +1,7 @@
 import { PhadePhase } from "../Enums.js";
 export default class PhadeBlock {
     // CONSTRUCTOR
-    constructor(mangerie, container, elem) {
+    constructor(mangerie, elem) {
         // ANIMATION PROPS
         this.phase = PhadePhase.Hold;
         this.runtime = 0;
@@ -10,7 +10,6 @@ export default class PhadeBlock {
         this.disableContainer = false;
         this.enableContainer = false;
         this.mangerie = mangerie;
-        this.container = container;
         this.mainElement = elem;
         this.mainElement.style.display = "none";
     }
@@ -25,9 +24,6 @@ export default class PhadeBlock {
                     this.phase = PhadePhase.Hold;
                 }
                 else {
-                    if (this.enableContainer) {
-                        this.container.style.opacity = (this.runtime / this.durationIn).toString();
-                    }
                     this.mainElement.style.opacity = (this.runtime / this.durationIn).toString();
                 }
                 break;
@@ -35,15 +31,10 @@ export default class PhadeBlock {
             case PhadePhase.Out:
                 if (this.runtime > this.durationOut) {
                     this.phase = PhadePhase.Done;
-                    if (this.disableContainer)
-                        this.container.style.display = "none";
                     this.mainElement.style.display = "none";
                     this.runtime = 0;
                 }
                 else {
-                    if (this.disableContainer) {
-                        this.container.style.opacity = (1 - this.runtime / this.durationOut).toString();
-                    }
                     this.mainElement.style.opacity = (1 - this.runtime / this.durationOut).toString();
                 }
                 break;
@@ -51,17 +42,13 @@ export default class PhadeBlock {
         return this.phase;
     }
     // ENABLE THE COMPONENT
-    Enable(full = false) {
-        this.enableContainer = full;
-        if (full)
-            this.container.style.display = "block";
+    Enable() {
         this.mainElement.style.display = "flex";
         this.runtime = 0;
         this.phase = PhadePhase.In;
     }
     // DISABLE THE COMPONENT
-    Disable(full = false) {
-        this.disableContainer = full;
+    Disable() {
         this.runtime = 0;
         this.phase = PhadePhase.Out;
     }

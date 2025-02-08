@@ -3,8 +3,8 @@ import PhadeBlock from "../PhadeBlock.js";
 import AlbumItem from "./AlbumItem.js";
 export default class AlbumPickerBlock extends PhadeBlock {
     // OVERRIDE ENABLE METHOD: ADD LOGIC TO CREATE ALBUM ITEMS
-    Enable(full = false) {
-        super.Enable(full);
+    Enable() {
+        super.Enable();
         while (this.albumList.firstChild) {
             this.albumList.removeChild(this.albumList.firstChild);
         }
@@ -26,7 +26,7 @@ export default class AlbumPickerBlock extends PhadeBlock {
     // CONSTRUCTOR: SET EVENT LISTENERS
     constructor(mangerie) {
         const element = document.getElementById("album-selector");
-        super(mangerie, element, element);
+        super(mangerie, element);
         // HTML Elements
         this.exitSelector = document.getElementById("exit-album-selector");
         this.exitButton = document.getElementById("exit-album-button");

@@ -2,7 +2,25 @@
 
 
 /* LOADER */
-
+#loading-screen {
+    position: fixed;
+    width: 100%; height: 100%;
+    z-index: 5000;
+    left: 0; top: 0; right: 0; bottom: 0;
+    margin: auto;
+    background-color: white;
+}
+#loading-screen::before {
+    background-image: url("assets/marble.jpg");
+    content: "";
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    margin: auto;
+    background-color: var(--mainColor);
+    opacity: 0.15;
+    background-size: 100% 100%;
+    pointer-events: none;
+}
 #loader-widget {
     position: absolute;
     left: 0; top: 0; right: 0; bottom: 0;
@@ -10,6 +28,9 @@
     width: min(10vw, 10vh);
     height: min(10vw, 10vh);
 }
+
+
+
 #welcome-text {
     opacity: 0;
     position: absolute;
@@ -203,7 +224,6 @@ h1 {
         "album-cover album-description album-description"
         "album-cover album-select-button album-select-button";
 }
-
 
 .album-item:hover, .album-item.selected {
     border-color: var(--mainColor);

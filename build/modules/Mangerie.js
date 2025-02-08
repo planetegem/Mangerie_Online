@@ -29,19 +29,17 @@ export default class Mangerie {
         // Set assets
         this.sounds = new AssetMap(soundLibrary);
         this.assets = new AssetArray(imageLibrary);
-        // Set components for menu
+        // Set components
         this.loader = new LoadingBlock(this);
         this.welcome = new WelcomeBlock(this);
         this.menu = new MenuBlock(this);
         this.info = new InfoBlock(this);
         this.albumSelector = new AlbumPickerBlock(this);
         this.titlecard = new TitlecardBlock(this);
-        // Set components for kaleidoscope
-        const kaleidoscopeContainer = document.getElementById("kaleidoscope-container");
-        this.kaleidoscope = new GameBlock(this, kaleidoscopeContainer);
+        this.kaleidoscope = new GameBlock(this);
         this.tutorial = new TutorialBlock(this);
         // Set start position
-        this.loader.Enable(true);
+        this.loader.Enable();
         this.currentBlock = this.loader;
         this.previousBlock = null;
         // Start the loop
@@ -49,53 +47,35 @@ export default class Mangerie {
     }
     SetState(state) {
         this.previousBlock = this.currentBlock;
+        this.former = this.state;
         this.state = state;
         switch (state) {
             case GameState.Loading:
                 this.currentBlock = this.loader;
-                this.currentBlock.Enable(true);
                 break;
             case GameState.Welcome:
                 this.currentBlock = this.welcome;
-                this.currentBlock.Enable();
                 break;
             case GameState.Menu:
                 this.currentBlock = this.menu;
-                if (this.previousBlock === this.kaleidoscope) {
-                    this.currentBlock.Enable(true);
-                    break;
-                }
-                if (this.previousBlock !== this.info || this.previousBlock !== this.albumSelector)
-                    this.currentBlock.Enable();
                 break;
             case GameState.Info:
                 this.currentBlock = this.info;
-                this.currentBlock.Enable();
                 break;
-            case GameState.Album:
+            case GameState.AlbumSelection:
                 this.currentBlock = this.albumSelector;
-                this.currentBlock.Enable();
-                break;
-            case GameState.StartGame:
-                this.currentBlock = this.kaleidoscope;
-                this.kaleidoscope.PictureBook = this.CurrentAlbum.content;
-                this.kaleidoscope.Enable();
-                this.state = GameState.Playing;
                 break;
             case GameState.Tutorial:
                 this.currentBlock = this.tutorial;
-                this.tutorial.Reset();
-                this.tutorial.Enable();
                 break;
             case GameState.Playing:
                 this.currentBlock = this.kaleidoscope;
                 break;
             case GameState.Titlecard:
                 this.currentBlock = this.titlecard;
-                this.titlecard.Enable();
-                this.titlecard.Title = this.CurrentAlbum.title;
                 break;
         }
+        this.currentBlock.Enable();
     }
     Loop() {
         let delta = Date.now() - this.time;

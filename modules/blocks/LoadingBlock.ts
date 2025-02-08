@@ -12,6 +12,9 @@ export default class LoadingBlock extends PhadeBlock implements Block {
     private rotationFactor: number = 0.4;
     private loadtime: number = 0;
 
+    // HTML PROPS
+    private widget: HTMLElement = document.getElementById("loader-widget")!;
+
     // LOADING PROPS
     private readonly albumPaths: string[] = ["assets/albums/bodybuilders/album.json", "assets/albums/art/album.json"];
     private loadingInProgress: boolean = true;
@@ -21,16 +24,16 @@ export default class LoadingBlock extends PhadeBlock implements Block {
 
     // CONSTRUCTOR
     constructor(mangerie: Mangerie){
-        const widget = document.getElementById("loader-widget")!;
-        super(mangerie, widget, widget);
+        const container: HTMLElement = document.getElementById("loading-screen")!;
+        super(mangerie, container);
 
         this.durationIn = 100;
         this.durationOut = 200;
     }
 
     // OVERRIDE ENABLE METHOD
-    public Enable(full: boolean = false): void {
-        super.Enable(full);
+    public Enable(): void {
+        super.Enable();
         this.loadingInProgress = true;
         this.LoadAssets();
     }
@@ -138,7 +141,7 @@ export default class LoadingBlock extends PhadeBlock implements Block {
             this.mangerie.SetState(this.mangerie.former);
         }
 
-        this.mainElement.style.transform = "rotate(" + this.loadtime*this.rotationFactor + "deg)";
+        this.widget.style.transform = "rotate(" + this.loadtime*this.rotationFactor + "deg)";
 
         return state;
     }

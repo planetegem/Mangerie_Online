@@ -5,7 +5,7 @@ export default class TutorialBlock extends PhadeBlock {
     // CONSTRUCTOR
     constructor(mangerie) {
         const container = document.getElementById("tutorial");
-        super(mangerie, container, container);
+        super(mangerie, container);
         this.previousArticle = null;
         this.step = 0;
         this.interactionAllowed = false;
@@ -46,13 +46,15 @@ export default class TutorialBlock extends PhadeBlock {
         this.previousArticle.Disable();
         return false;
     }
-    Reset() {
+    // OVERRIDE ENABLE: add logic to reset articles before starting enable animation
+    Enable() {
         this.step = 0;
         this.currentArticle = this.articles[0];
         for (let article of this.articles) {
             article.Reset();
         }
         this.start = true;
+        super.Enable();
     }
     // UPDATE IMPLEMENTATION: ADD SWITCHING ANIMATION
     Update(delta) {

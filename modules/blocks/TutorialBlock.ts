@@ -15,7 +15,7 @@ export default class TutorialBlock extends PhadeBlock implements Block {
     // CONSTRUCTOR
     constructor(mangerie: Mangerie){
         const container: HTMLElement = document.getElementById("tutorial")!;
-        super(mangerie, container, container);
+        super(mangerie, container);
 
         this.articles = [];
         let htmlArticles: HTMLElement[] = Array.from(document.querySelectorAll("#tutorial article"));
@@ -60,13 +60,15 @@ export default class TutorialBlock extends PhadeBlock implements Block {
         return false;
     }
 
-    public Reset(): void {
+    // OVERRIDE ENABLE: add logic to reset articles before starting enable animation
+    public Enable(): void {
         this.step = 0;
         this.currentArticle = this.articles[0];
         for (let article of this.articles){
             article.Reset();
         }
         this.start = true;
+        super.Enable();
     }
 
     // UPDATE IMPLEMENTATION: ADD SWITCHING ANIMATION

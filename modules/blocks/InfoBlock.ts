@@ -10,7 +10,7 @@ export default class InfoBlock extends PhadeBlock implements Block{
 
     constructor(mangerie: Mangerie){
         const element: HTMLElement = document.getElementById("info-text")!;
-        super(mangerie, element, element);
+        super(mangerie, element);
         this.durationIn = 350;
         this.durationOut = 350;
 

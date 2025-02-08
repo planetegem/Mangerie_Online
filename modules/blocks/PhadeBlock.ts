@@ -6,7 +6,6 @@ export default class PhadeBlock {
     protected mangerie: Mangerie;
 
     // HTML ELEMENTS
-    protected container: HTMLElement;
     protected mainElement: HTMLElement;
 
     // ANIMATION PROPS
@@ -18,9 +17,8 @@ export default class PhadeBlock {
     protected enableContainer: boolean = false;
 
     // CONSTRUCTOR
-    constructor (mangerie: Mangerie, container: HTMLElement, elem: HTMLElement){
+    constructor (mangerie: Mangerie, elem: HTMLElement){
         this.mangerie = mangerie;
-        this.container = container;
         this.mainElement = elem;
         this.mainElement.style.display = "none";
     }
@@ -36,9 +34,6 @@ export default class PhadeBlock {
                     this.mainElement.style.opacity = "1";
                     this.phase = PhadePhase.Hold;
                 } else {
-                    if (this.enableContainer){
-                        this.container.style.opacity = (this.runtime/this.durationIn).toString();
-                    }
                     this.mainElement.style.opacity = (this.runtime/this.durationIn).toString();
                 }
                 break;
@@ -47,15 +42,10 @@ export default class PhadeBlock {
             case PhadePhase.Out:
                 if (this.runtime > this.durationOut){
                     this.phase = PhadePhase.Done;
-                    if (this.disableContainer)
-                        this.container.style.display = "none";
                     this.mainElement.style.display = "none";
                     this.runtime = 0;
 
                 } else {
-                    if (this.disableContainer){
-                        this.container.style.opacity = (1 - this.runtime/this.durationOut).toString();
-                    } 
                     this.mainElement.style.opacity = (1 - this.runtime/this.durationOut).toString();
                 }
                 break;
@@ -64,21 +54,14 @@ export default class PhadeBlock {
     }
 
     // ENABLE THE COMPONENT
-    public Enable(full: boolean = false) {
-        this.enableContainer = full;
-        if (full)
-            this.container.style.display = "block";
+    public Enable() {
         this.mainElement.style.display = "flex";
-
         this.runtime = 0;
         this.phase = PhadePhase.In;
     }
 
     // DISABLE THE COMPONENT
-    public Disable(full: boolean = false) {
-        
-        this.disableContainer = full;
-
+    public Disable() {
         this.runtime = 0;
         this.phase = PhadePhase.Out;
     }

@@ -15,8 +15,8 @@ export default class AlbumPickerBlock extends PhadeBlock implements Block {
     private albums: AlbumItem[] = [];
 
     // OVERRIDE ENABLE METHOD: ADD LOGIC TO CREATE ALBUM ITEMS
-    public Enable(full: boolean = false): void {
-        super.Enable(full);
+    public Enable(): void {
+        super.Enable();
         while (this.albumList.firstChild) {
             this.albumList.removeChild(this.albumList.firstChild);
         }
@@ -41,7 +41,7 @@ export default class AlbumPickerBlock extends PhadeBlock implements Block {
     // CONSTRUCTOR: SET EVENT LISTENERS
     constructor(mangerie: Mangerie){
         const element: HTMLElement = document.getElementById("album-selector")!;
-        super(mangerie, element, element);
+        super(mangerie, element);
         this.durationIn = 350;
         this.durationOut = 350;
     
