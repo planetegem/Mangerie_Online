@@ -1,9 +1,8 @@
 import { GameState, PhadePhase } from "../Enums.js";
-import { Block } from "../Interfaces.js";
 import Mangerie from "../Mangerie.js";
 import PhadeBlock from "./PhadeBlock.js";
 
-export default class TitlecardBlock extends PhadeBlock implements Block {
+export default class TitlecardBlock extends PhadeBlock {
 
     // HTML Elements
     private titleContainer: HTMLElement = document.getElementById("title-container")!;
@@ -110,11 +109,10 @@ export default class TitlecardBlock extends PhadeBlock implements Block {
 
     // UPDATE FUNCTION: PLAY SOUND EFFECT & START PHADEOUT
     public Update(delta: number): PhadePhase {
-        const fader = this.Fade.bind(this);
-        const state: PhadePhase = fader(delta);
+        super.Update(delta);
         this.customRuntime += delta;
         
-        switch(state) {
+        switch(this.phase) {
             case PhadePhase.Hold:
                 if (this.customRuntime >= this.titledelay + this.durationIn)
                     this.titleIntro.style.opacity = ((this.customRuntime - this.titledelay - this.durationIn)/this.fadeIntro).toString();
@@ -146,6 +144,6 @@ export default class TitlecardBlock extends PhadeBlock implements Block {
 
                 break;
         }
-        return state;
+        return this.phase;
     }
 }

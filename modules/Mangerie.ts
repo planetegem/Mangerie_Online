@@ -7,9 +7,9 @@ import { GameState, PhadePhase } from "./Enums.js";
 import { Block } from "./Interfaces.js";
 import TutorialBlock from "./blocks/TutorialBlock.js";
 import InfoBlock from "./blocks/InfoBlock.js";
-import AlbumPickerBlock from "./blocks/album/AlbumPickerBlock.js";
 import PhotoAlbum from "./blocks/album/PhotoAlbum.js";
 import TitlecardBlock from "./blocks/TitlecardBlock.js";
+import AlbumManagerBlock from "./blocks/album/AlbumManagerBlock.js";
 
 
 
@@ -46,7 +46,7 @@ export default class Mangerie {
     private kaleidoscope: GameBlock;
     private tutorial: TutorialBlock;
     private info: InfoBlock;
-    private albumSelector: AlbumPickerBlock;
+    private albumManager: AlbumManagerBlock;
     private titlecard: TitlecardBlock;
 
     // CONSTRUCTOR: SET ASSETS, INITIALIZE COMPONENTS, START LOADING PROCESS
@@ -60,10 +60,10 @@ export default class Mangerie {
         this.welcome = new WelcomeBlock(this);
         this.menu = new MenuBlock(this);
         this.info = new InfoBlock(this);
-        this.albumSelector = new AlbumPickerBlock(this);
         this.titlecard = new TitlecardBlock(this);
         this.kaleidoscope = new GameBlock(this);
         this.tutorial = new TutorialBlock(this);
+        this.albumManager = new AlbumManagerBlock(this);
 
         // Set start position
         this.loader.Enable();
@@ -92,8 +92,8 @@ export default class Mangerie {
             case GameState.Info:
                 this.currentBlock = this.info;
                 break;
-            case GameState.AlbumSelection:
-                this.currentBlock = this.albumSelector;
+            case GameState.AlbumManager:
+                this.currentBlock = this.albumManager;
                 break;
             case GameState.Tutorial:
                 this.currentBlock = this.tutorial;

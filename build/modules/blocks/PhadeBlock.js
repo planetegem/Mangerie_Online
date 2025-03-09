@@ -14,7 +14,7 @@ export default class PhadeBlock {
         this.mainElement.style.display = "none";
     }
     // FADE LOGIC: FADE IN AND OUT OF EXISTENCE
-    Fade(delta) {
+    Update(delta) {
         this.runtime += delta;
         switch (this.phase) {
             // Fading in

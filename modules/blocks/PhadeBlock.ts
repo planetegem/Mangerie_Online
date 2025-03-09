@@ -1,7 +1,8 @@
 import Mangerie from "../Mangerie.js";
 import { PhadePhase } from "../Enums.js";
+import { Block } from "../Interfaces.js";
 
-export default class PhadeBlock {
+export default class PhadeBlock implements Block{
     // LINK TO STATE HANDLER
     protected mangerie: Mangerie;
 
@@ -24,7 +25,7 @@ export default class PhadeBlock {
     }
 
     // FADE LOGIC: FADE IN AND OUT OF EXISTENCE
-    protected Fade(delta: number): PhadePhase {
+    public Update(delta: number): PhadePhase {
         this.runtime += delta;
 
         switch(this.phase){

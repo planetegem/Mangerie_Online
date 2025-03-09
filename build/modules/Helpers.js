@@ -1,3 +1,17 @@
+// Helper function: fit image into square canvas
+export function FitImage(imgWidth, imgHeight, canvas) {
+    const cWidth = canvas.offsetWidth, cHeight = canvas.offsetHeight;
+    let width = cWidth, height = cHeight, marginX = 0, marginY = 0;
+    if (imgWidth > imgHeight) {
+        width = height * (imgWidth / imgHeight);
+        marginX = -(width - height) / 2;
+    }
+    else if (imgHeight > imgWidth) {
+        height = width * (imgHeight / imgWidth);
+        marginY = -(height - width) / 2;
+    }
+    return [width, height, marginX, marginY];
+}
 // Helper function: fetch photo album from json
 export async function getJSON(path) {
     try {

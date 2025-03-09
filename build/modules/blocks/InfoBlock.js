@@ -24,8 +24,4 @@ export default class InfoBlock extends PhadeBlock {
             this.mangerie.SetState(GameState.Menu);
         });
     }
-    Update(delta) {
-        const fader = this.Fade.bind(this);
-        return fader(delta);
-    }
 }

@@ -6,8 +6,8 @@ import MenuBlock from "./blocks/MenuBlock.js";
 import { GameState, PhadePhase } from "./Enums.js";
 import TutorialBlock from "./blocks/TutorialBlock.js";
 import InfoBlock from "./blocks/InfoBlock.js";
-import AlbumPickerBlock from "./blocks/album/AlbumPickerBlock.js";
 import TitlecardBlock from "./blocks/TitlecardBlock.js";
+import AlbumManagerBlock from "./blocks/album/AlbumManagerBlock.js";
 export default class Mangerie {
     set Albums(albums) { this.albums = albums; }
     get Albums() { return this.albums; }
@@ -34,10 +34,10 @@ export default class Mangerie {
         this.welcome = new WelcomeBlock(this);
         this.menu = new MenuBlock(this);
         this.info = new InfoBlock(this);
-        this.albumSelector = new AlbumPickerBlock(this);
         this.titlecard = new TitlecardBlock(this);
         this.kaleidoscope = new GameBlock(this);
         this.tutorial = new TutorialBlock(this);
+        this.albumManager = new AlbumManagerBlock(this);
         // Set start position
         this.loader.Enable();
         this.currentBlock = this.loader;
@@ -62,8 +62,8 @@ export default class Mangerie {
             case GameState.Info:
                 this.currentBlock = this.info;
                 break;
-            case GameState.AlbumSelection:
-                this.currentBlock = this.albumSelector;
+            case GameState.AlbumManager:
+                this.currentBlock = this.albumManager;
                 break;
             case GameState.Tutorial:
                 this.currentBlock = this.tutorial;

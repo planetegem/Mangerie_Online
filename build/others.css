@@ -25,3 +25,92 @@
     width: min(10vw, 10vh);
     height: min(10vw, 10vh);
 }
+
+/* WELCOME BLOCK */
+#welcome-text {
+    opacity: 0;
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    margin: auto;
+    width: 60vh;
+    max-width: 80vw;
+    height: max-content;
+    border: calc(var(--borderWidth) * 0.5) solid var(--mainColor);
+    background-color: white;
+    z-index: 150;
+    flex-direction: column;
+}
+#welcome-text h1 {
+    font-variant: small-caps;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-shadow:
+            -1px -1px 0 grey,  
+            1px -1px 0 grey,
+            -1px 1px 0 grey,
+            1px 1px 0 grey;
+    color: var(--mainColor);
+    margin: 1.5rem;
+}
+#welcome-text span {
+    margin: 1.5rem;
+    color:#395e5e;
+    font-variant: small-caps;
+    font-size: 1.15em;
+    font-weight: bold;
+    animation: blinkingContinue 1.2s steps(5, start) infinite;
+}
+
+/* TITLE CARD */
+#title-card {
+    display: none;
+    opacity: 0;
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    margin: auto;
+    width: 100%; height: 100%;
+    z-index: 500;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#title-intro {
+    font-family: Arial, Helvetica, sans-serif;
+    font-variant: small-caps;
+    font-size: 1.1em;
+    font-weight: bold;
+    text-align: center;
+    color: var(--mainColor);
+    margin-bottom: 1.2em;
+    opacity: 0.8;
+    user-select: none;
+}
+#title-container {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+#line-tester {
+    position: absolute;
+    visibility: hidden;
+    left: 0;
+}
+#title-container span {
+    margin: 0; padding: 0 10%;
+    font-family: GreatVibes;
+    font-size: 3.5em;
+    font-weight: 500;
+    color: var(--mainColor);
+    user-select: none;
+}
+.title-line {
+    mask-repeat: no-repeat;
+    mask-image: linear-gradient(
+        to right, rgba(0, 0, 0, 1) 90%, rgba(0, 0, 0, 0)
+    );
+    mask-size: 0%;
+    animation-fill-mode: forwards;
+    animation-timing-function: linear;
+}

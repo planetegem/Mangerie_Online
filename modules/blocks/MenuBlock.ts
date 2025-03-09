@@ -1,14 +1,17 @@
 import { GameState, PhadePhase } from "../Enums.js";
 import Mangerie from "../Mangerie.js";
-import { Block } from "../Interfaces.js";
 import PhadeBlock from "./PhadeBlock.js";
 
-export default class MenuBlock extends PhadeBlock implements Block {
+export default class MenuBlock extends PhadeBlock {
     
     // STATE MEMORY
     private startingGame: boolean = false;
     private fading: boolean = true;
     private enabled: boolean = false;
+
+    // SOUND EFFECT
+    private openingSound: HTMLAudioElement;
+    private openingSoundPlayed: boolean = false;
 
     // MENU BUTTONS
     private start: HTMLElement = document.getElementById("start-button")!;
@@ -51,22 +54,28 @@ export default class MenuBlock extends PhadeBlock implements Block {
         });
         this.album.addEventListener("click", () => {
             if (this.phase != PhadePhase.Hold) return;
-            this.mangerie.SetState(GameState.AlbumSelection);
+            this.mangerie.SetState(GameState.AlbumManager);
         });
         this.info.addEventListener("click", () => {
             if (this.phase != PhadePhase.Hold) return;
             this.mangerie.SetState(GameState.Info);
         });
+
+        // Set sound effects
+        this.openingSound = mangerie.sounds.content.get("spaceship")!.object;
     }
 
     // MAIN UPDATE FUNCTION: ANIMATE LOGO
     public Update(delta: number): number {
-        const fader = this.Fade.bind(this);
-        const state: PhadePhase = fader(delta);
+        super.Update(delta);
 
-        switch(state){
+        switch(this.phase){
             case PhadePhase.Hold:
                 this.logoDeco.classList.add("start-fade");
+                if (!this.openingSoundPlayed && this.runtime >= this.logoFade - 500){
+                    this.openingSoundPlayed = true;
+                    this.openingSound.play();
+                }
 
                 if (this.fading){
                     if (this.runtime >= this.logoFade + this.buttonsDelay + this.buttonsFade){
@@ -81,11 +90,17 @@ export default class MenuBlock extends PhadeBlock implements Block {
                 this.logoDeco.classList.remove("start-fade");
                 this.fading = true;
                 this.buttonContainer.style.opacity = "0";
+
+                // Reset sound effect
+                this.openingSoundPlayed = false;
+                this.openingSound.pause();
+                this.openingSound.currentTime = 0;
+
                 if (this.startingGame){
                     this.startingGame = false;
                     this.mangerie.SetState(GameState.Titlecard);
                 }
         }    
-        return state;  
+        return this.phase;  
     }
 }

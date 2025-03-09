@@ -63,14 +63,14 @@ export default class TutorialBlock extends PhadeBlock {
                 this.currentArticle.Enable();
                 this.start = false;
             }
-            if (this.previousArticle !== null && this.previousArticle.Fade(delta) === PhadePhase.Done) {
+            if (this.previousArticle !== null && this.previousArticle.Update(delta) === PhadePhase.Done) {
                 this.previousArticle = null;
                 this.currentArticle.Enable();
             }
-            let fade = this.currentArticle.Fade(delta);
+            let fade = this.currentArticle.Update(delta);
             this.interactionAllowed = (fade === PhadePhase.Hold);
         }
-        const fader = this.Fade.bind(this);
-        return fader(delta);
+        super.Update(delta);
+        return this.phase;
     }
 }

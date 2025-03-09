@@ -1,6 +1,6 @@
 import { GameState, PhadePhase } from "../Enums.js";
 import Mangerie from "../Mangerie.js";
-import { Block, StandardModule } from "../Interfaces.js";
+import { Block } from "../Interfaces.js";
 import Kaleidoscope from "../kaleidoscope/Kaleidoscope.js";
 
 

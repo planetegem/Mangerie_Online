@@ -77,10 +77,8 @@
         <link rel="stylesheet" href="defaults.css">
         <link rel="stylesheet" href="menu.css">
         <link rel="stylesheet" href="others.css">
-
-        
         <link rel="stylesheet" href="kaleidoscope.css">
-        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="album-manager.css">
         <link rel="stylesheet" href="tutorial.css">
 
 
@@ -127,29 +125,83 @@
         </nav>
 
         <!-- SELECT WHICH ALBUM TO VIEW IN THE KALEIDOSCOPE -->
-        <aside id="album-selector" class="menu-modal">
-            <span id="exit-album-selector" class="exit-button">X</span>
-            <h2>Album Selector</h2>
-            <p>
-                Select a photo album to view in the Mangerie kaleidoscope.
-            </p>
-            <ul id="album-list" class="modal-list">
-                <li id="create-new-album">
-                    <button id="create-new-album-button">
-                        <img src="assets/plus.svg">
-                        <h4>create new</h4>
+        <section id="album-manager">
+            
+            <aside id="album-selector">
+                <span id="exit-to-menu" class="exit-button">X</span>
+                <h2>Album Selector</h2>
+                <p>
+                    Select a photo album to view in the Mangerie kaleidoscope.
+                </p>
+                <ul id="album-list">
+                    <li id="create-new-album">
+                        <button id="create-new-album-button">
+                            <img src="assets/plus.svg">
+                            <h4>create new</h4>
+                        </button>
+                    </li>
+                </ul>
+                <button id="confirm-to-menu" class="album menu-button">
+                    <img class="left-arrow" src="assets/triangle.svg">
+                    <span>return to menu</span>
+                    <img class="right-arrow" src="assets/triangle.svg">
+                </button>
+            </aside>
+    
+            <!-- CREATE NEW ALBUM -->
+            <aside id="album-creator">
+                <span id="exit-album-creator" class="exit-button">X</span>
+                <h2>Album Creator</h2>
+                <p>
+                    Create your own photo album to use in the kaleidoscope by adding entries below. 
+                    Description and title can also be changed.
+                </p>
+                <form id="album-creator-list">
+                    <div id="created-album-header">
+                    </div>
+                    <ul id="created-album-content">
+                        <li id="add-new-image">
+                            <button id="add-new-image-button">
+                                <img src="assets/plus.svg">
+                                <h4>add&nbsp;image</h4>
+                            </button>
+                        </li>
+                    </ul>               
+                </form>
+                <nav>
+                    <button id="cancel-album-creation" class="album menu-button">
+                        <img class="left-arrow" src="assets/triangle.svg">
+                        <span>cancel</span>
+                        <img class="right-arrow" src="assets/triangle.svg">
                     </button>
-                </li>
-            </ul>
-            <button id="exit-album-button" class="menu-button">
-                <img class="left-arrow" src="assets/triangle.svg">
-                <span>return to menu</span>
-                <img class="right-arrow" src="assets/triangle.svg">
-            </button>
+                    <button id="confirm-album-creation" class="album menu-button">
+                        <img class="left-arrow" src="assets/triangle.svg">
+                        <span>save</span>
+                        <img class="right-arrow" src="assets/triangle.svg">
+                    </button>
+                </nav>
+                <span id="album-creator-error" class="error album">Nothing was selected</span>
+            </aside>
 
-            <!-- ALBUM CREATOR GOES HERE -->
-
-        </aside>
+            <!-- FILE SELECTION DIALOG -->
+            <dialog id="file-selector">
+                <span id="exit-file-selector" class="exit-button">X</span>
+                <label for="url-input" id="url-input-label">
+                    <input type="url" id="url-input" placeholder="Enter an url to an external image...">
+                </label>
+                <p>OR</p>
+                <label for="file-input" id="file-input-label">
+                    <span id="file-input-feedback">Selected file: none</span>
+                    <input type="file" accept="image/png, image/jpeg" id="file-input">
+                </label>
+                <button class="menu-button" id="confirm-file-selection">
+                    <img class="left-arrow" src="assets/triangle.svg">
+                    <span>confirm</span>
+                    <img class="right-arrow" src="assets/triangle.svg">
+                </button>
+                <span id="file-selector-error" class="error album">Nothing was selected</span>
+            </dialog>
+        </section>
 
         <!-- TITLE CARD -->
         <section id="title-card">

@@ -47,6 +47,22 @@ export const imageLibrary = [
     {
         desc: "logo overlay for menu",
         src: "assets/mangerie-online.webp", object: new Image()
+    },
+    {
+        desc: "blank image used during album creation",
+        src: "assets/blank.webp", object: new Image()
+    },
+    {
+        desc: "overlay for blank image used during album creation",
+        src: "assets/blank_overlay.webp", object: new Image()
+    },
+    {
+        desc: "delete icon, credits: https://www.svgrepo.com/svg/511788/delete-1487",
+        src: "assets/delete.svg", object: new Image()
+    },
+    {
+        desc: "edit icon, credits: https://www.svgrepo.com/svg/436208/customize",
+        src: "assets/edit.svg", object: new Image()
     }
 ];
 // Sound effects library
@@ -90,6 +106,13 @@ export const soundLibrary = new Map([
         {
             src: "assets/sounds/tick3.mp3",
             desc: "creative commons @ https://freesound.org/people/fellur/sounds/429721/",
+            object: new Audio()
+        }
+    ],
+    ["spaceship",
+        {
+            src: "assets/sounds/spaceship.mp3",
+            desc: "creative commons @ https://freesound.org/people/Tissman/sounds/455856/",
             object: new Audio()
         }
     ]

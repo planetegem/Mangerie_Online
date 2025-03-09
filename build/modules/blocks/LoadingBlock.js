@@ -27,6 +27,7 @@ export default class LoadingBlock extends PhadeBlock {
     Enable() {
         super.Enable();
         this.loadingInProgress = true;
+        this.loadtime = 0;
         this.LoadAssets();
     }
     // LOADING LOGIC: STARTED EVERY TIME COMPONENT IS ENABLED
@@ -84,12 +85,19 @@ export default class LoadingBlock extends PhadeBlock {
             if (rawAlbum !== null)
                 this.rawAlbums.push(rawAlbum);
         }
-        // Next get custom albums from local storage  
         // Normalize albums: add logic to signal load progress 
         const albums = [];
         this.rawAlbums.forEach((rawAlbum) => {
-            albums.push(new PhotoAlbum(rawAlbum, albums.length));
+            albums.push(new PhotoAlbum(rawAlbum, true, albums.length));
         });
+        // Next get custom albums from local storage
+        const ls = localStorage.getItem("createdAlbums");
+        if (ls)
+            this.rawAlbums = JSON.parse(ls);
+        this.rawAlbums.forEach((rawAlbum) => {
+            albums.push(new PhotoAlbum(rawAlbum, false, albums.length));
+        });
+        this.mangerie.Albums = albums;
         // Start loading albums
         albums.forEach((album) => {
             for (let photo of album.content) {
@@ -103,7 +111,19 @@ export default class LoadingBlock extends PhadeBlock {
                         }
                     }
                 };
-                photo.object.src = photo.src;
+                photo.object.onerror = () => {
+                    console.warn("Warning: looks like an URL has gone missing in one of your albums");
+                    photo.src = "assets/blank.webp";
+                    if (album.Loaded()) {
+                        this.loadedAlbums++;
+                        console.log("Completely loaded '" + album.title + "' photo album");
+                        if (this.loadedAlbums >= albums.length) {
+                            console.log("Everything was loaded");
+                            this.loadingInProgress = false;
+                        }
+                    }
+                };
+                photo.object.src = (photo.dataURL && photo.dataURL !== "") ? photo.dataURL : photo.src;
             }
         });
         // Push normaized albums to mangerie (for use in other components)
@@ -111,14 +131,13 @@ export default class LoadingBlock extends PhadeBlock {
     }
     // UPDATE FUNCTION: CHANGE STATE WHEN GAME HAS FINISHED LOADING
     Update(delta) {
+        super.Update(delta);
         this.loadtime += delta;
-        const fader = this.Fade.bind(this);
-        const state = fader(delta);
-        if (!this.loadingInProgress && (this.loadtime >= this.minimumLoadTime) && state === PhadePhase.Hold) {
+        if (!this.loadingInProgress && (this.loadtime >= this.minimumLoadTime) && this.phase === PhadePhase.Hold) {
             this.Disable();
             this.mangerie.SetState(this.mangerie.former);
         }
         this.widget.style.transform = "rotate(" + this.loadtime * this.rotationFactor + "deg)";
-        return state;
+        return this.phase;
     }
 }

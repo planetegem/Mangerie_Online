@@ -29,11 +29,18 @@ export interface AssetObject<x> {
     desc: string;
     src: string;
     object: x;
+    dataURL?: string;
 }
-
 export interface IAlbum {
     title: string;
     description: string;
     cover: string;
-    images: {desc: string; src: string}[];
+    images: {desc: string; src: string; dataURL?: string}[];
+}
+export interface IFileResult {
+    result: string;
+    type: string;
+}
+export interface IFileReceiver {
+    set ReceivedFile(result: IFileResult);
 }

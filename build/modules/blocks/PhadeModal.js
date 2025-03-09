@@ -29,7 +29,7 @@ export default class PhadeModal {
         this.modal.style.opacity = "0";
     }
     // ANIMATION METHOD: RETURNS ANIMATION PHASE
-    Fade(delta) {
+    Update(delta) {
         this.runtime += delta;
         switch (this.phase) {
             case PhadePhase.In:

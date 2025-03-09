@@ -1,5 +1,26 @@
 import { IAlbum } from "./Interfaces.js";
 
+// Helper function: fit image into square canvas
+export function FitImage(imgWidth: number, imgHeight: number, canvas: HTMLCanvasElement) : [number, number, number, number] {
+    const cWidth: number = canvas.offsetWidth, cHeight = canvas.offsetHeight;
+    
+    let width: number = cWidth, height: number = cHeight,
+        marginX: number = 0, marginY: number = 0;
+
+    if (imgWidth > imgHeight){
+        width = height * (imgWidth / imgHeight);
+        marginX = -(width - height) / 2;
+
+    } else if (imgHeight > imgWidth){
+        height = width * (imgHeight / imgWidth);
+        marginY = -(height - width) / 2;
+
+    } 
+    
+    return [width, height, marginX, marginY];
+}
+
+
 // Helper function: fetch photo album from json
 export async function getJSON(path: string): Promise<IAlbum | null>{
     try {

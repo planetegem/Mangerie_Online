@@ -1,12 +1,12 @@
 import Mangerie from "../Mangerie.js";
-import { Block, IAlbum } from "../Interfaces.js";
+import { IAlbum } from "../Interfaces.js";
 import PhadeBlock from "./PhadeBlock.js";
 import { PhadePhase } from "../Enums.js";
 import { getJSON } from "../Helpers.js";
 import PhotoAlbum from "./album/PhotoAlbum.js";
 
 // LOADING WIDGET: ROTATES UNTIL GAME SIGNALS THAT LOADING IS COMPLETE
-export default class LoadingBlock extends PhadeBlock implements Block {
+export default class LoadingBlock extends PhadeBlock {
     // ANIMATION PROPERTIES
     private minimumLoadTime: number = 750;
     private rotationFactor: number = 0.4;
@@ -35,6 +35,7 @@ export default class LoadingBlock extends PhadeBlock implements Block {
     public Enable(): void {
         super.Enable();
         this.loadingInProgress = true;
+        this.loadtime = 0;
         this.LoadAssets();
     }
 
@@ -101,14 +102,21 @@ export default class LoadingBlock extends PhadeBlock implements Block {
             if (rawAlbum !== null) this.rawAlbums.push(rawAlbum);
         }
 
-        // Next get custom albums from local storage  
-        
         // Normalize albums: add logic to signal load progress 
         const albums: PhotoAlbum[] = [];
         this.rawAlbums.forEach((rawAlbum) => {
-            albums.push(new PhotoAlbum(rawAlbum, albums.length));
+            albums.push(new PhotoAlbum(rawAlbum, true, albums.length));
         });
-        
+
+        // Next get custom albums from local storage
+        const ls: string | null = localStorage.getItem("createdAlbums");
+        if (ls) this.rawAlbums = JSON.parse(ls);
+        this.rawAlbums.forEach((rawAlbum) => {
+            albums.push(new PhotoAlbum(rawAlbum, false, albums.length));
+        });
+
+        this.mangerie.Albums = albums;
+
         // Start loading albums
         albums.forEach((album) => {
             for (let photo of album.content){
@@ -122,7 +130,19 @@ export default class LoadingBlock extends PhadeBlock implements Block {
                         }
                     }
                 };
-            photo.object.src = photo.src;
+                photo.object.onerror = () => {
+                    console.warn("Warning: looks like an URL has gone missing in one of your albums");
+                    photo.src = "assets/blank.webp";
+                    if (album.Loaded()){
+                        this.loadedAlbums++;
+                        console.log("Completely loaded '" + album.title + "' photo album");
+                        if (this.loadedAlbums >= albums.length){
+                            console.log("Everything was loaded");
+                            this.loadingInProgress = false;
+                        }
+                    }
+                };
+                photo.object.src = (photo.dataURL && photo.dataURL !== "") ? photo.dataURL : photo.src;
             }
         });
 
@@ -132,17 +152,15 @@ export default class LoadingBlock extends PhadeBlock implements Block {
 
     // UPDATE FUNCTION: CHANGE STATE WHEN GAME HAS FINISHED LOADING
     public Update(delta: number): PhadePhase {
-        this.loadtime += delta;
-        const fader = this.Fade.bind(this);
-        const state: PhadePhase = fader(delta);
+        super.Update(delta);
 
-        if (!this.loadingInProgress && (this.loadtime >= this.minimumLoadTime) && state === PhadePhase.Hold){
+        this.loadtime += delta;
+        if (!this.loadingInProgress && (this.loadtime >= this.minimumLoadTime) && this.phase === PhadePhase.Hold){
             this.Disable();
             this.mangerie.SetState(this.mangerie.former);
         }
-
         this.widget.style.transform = "rotate(" + this.loadtime*this.rotationFactor + "deg)";
 
-        return state;
+        return this.phase;
     }
 }

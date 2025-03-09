@@ -88,10 +88,9 @@ export default class TitlecardBlock extends PhadeBlock {
     }
     // UPDATE FUNCTION: PLAY SOUND EFFECT & START PHADEOUT
     Update(delta) {
-        const fader = this.Fade.bind(this);
-        const state = fader(delta);
+        super.Update(delta);
         this.customRuntime += delta;
-        switch (state) {
+        switch (this.phase) {
             case PhadePhase.Hold:
                 if (this.customRuntime >= this.titledelay + this.durationIn)
                     this.titleIntro.style.opacity = ((this.customRuntime - this.titledelay - this.durationIn) / this.fadeIntro).toString();
@@ -117,6 +116,6 @@ export default class TitlecardBlock extends PhadeBlock {
                     this.mangerie.SetState(GameState.Playing);
                 break;
         }
-        return state;
+        return this.phase;
     }
 }

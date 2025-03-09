@@ -1,7 +1,8 @@
 import { PhadePhase } from "../Enums.js";
+import { Block } from "../Interfaces.js";
 
 // VARIATION ON THE PHADEBLOCK, USED FOR MODALS. COMBINES FADE IN WITH VERTICAL TRANSLATION
-export default class PhadeModal {
+export default class PhadeModal implements Block {
     // ANIMATION PROPERTIES
     protected fadeIn: number = 500;
     protected fadeOut: number = 500;
@@ -36,7 +37,7 @@ export default class PhadeModal {
     }
 
     // ANIMATION METHOD: RETURNS ANIMATION PHASE
-    public Fade(delta: number): PhadePhase {
+    public Update(delta: number): PhadePhase {
         this.runtime += delta;
         switch (this.phase){
             case PhadePhase.In:

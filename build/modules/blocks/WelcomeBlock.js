@@ -18,9 +18,4 @@ export default class WelcomeBlock extends PhadeBlock {
             this.mangerie.SetState(GameState.Menu);
         });
     }
-    // UPDATE IMPLEMENTATION
-    Update(delta) {
-        const fader = this.Fade.bind(this);
-        return fader(delta);
-    }
 }

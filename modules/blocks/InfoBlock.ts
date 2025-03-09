@@ -1,9 +1,8 @@
 import { GameState, PhadePhase } from "../Enums.js";
-import { Block } from "../Interfaces.js";
 import Mangerie from "../Mangerie.js";
 import PhadeBlock from "./PhadeBlock.js";
 
-export default class InfoBlock extends PhadeBlock implements Block{
+export default class InfoBlock extends PhadeBlock {
     // HTML Elements
     private closeButton: HTMLElement = document.getElementById("exit-info")!;
     private closeButton2: HTMLElement = document.getElementById("exit-info-button")!;
@@ -29,10 +28,4 @@ export default class InfoBlock extends PhadeBlock implements Block{
             this.mangerie.SetState(GameState.Menu);
         });
     }
-
-    public Update(delta: number): PhadePhase {
-        const fader = this.Fade.bind(this);
-        return fader(delta);
-    }
-
 }
