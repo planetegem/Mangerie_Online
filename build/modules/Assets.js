@@ -115,5 +115,54 @@ export const soundLibrary = new Map([
             desc: "creative commons @ https://freesound.org/people/Tissman/sounds/455856/",
             object: new Audio()
         }
+    ],
+    ["duck",
+        {
+            src: "assets/sounds/duck.mp3",
+            desc: "creative commons @ https://freesound.org/people/OwennewO/sounds/719106/",
+            object: new Audio()
+        }
+    ],
+    ["bowl",
+        {
+            src: "assets/sounds/bowl.mp3",
+            desc: "creative commons @ https://freesound.org/people/Benboncan/sounds/69352/",
+            object: new Audio()
+        }
+    ],
+    ["bowl2",
+        {
+            src: "assets/sounds/bowl2.mp3",
+            desc: "creative commons @ https://freesound.org/people/willc2_45220/sounds/75134/",
+            object: new Audio()
+        }
+    ],
+    ["error",
+        {
+            src: "assets/sounds/error.mp3",
+            desc: "creative commons @ https://freesound.org/people/Sadiquecat/sounds/742998/",
+            object: new Audio()
+        }
+    ],
+    ["press",
+        {
+            src: "assets/sounds/press.mp3",
+            desc: "creative commons @ https://freesound.org/people/SpeedY/sounds/8505/",
+            object: new Audio()
+        }
+    ],
+    ["window",
+        {
+            src: "assets/sounds/window.mp3",
+            desc: "creative commons @ https://freesound.org/people/Aquafeniz/sounds/468151/",
+            object: new Audio()
+        }
+    ],
+    ["wind-up",
+        {
+            src: "assets/sounds/wind-up.mp3",
+            desc: "creative commons @ https://freesound.org/people/Anthousai/sounds/336609/",
+            object: new Audio()
+        }
     ]
 ]);

@@ -3,6 +3,14 @@ import Mangerie from "../Mangerie.js";
 import PhadeBlock from "./PhadeBlock.js";
 
 export default class InfoBlock extends PhadeBlock {
+
+    // SOUND EFFECTS
+    private exitSound: HTMLAudioElement;
+    private PlayExitSound(): void {
+        this.exitSound.currentTime = 0;
+        this.exitSound.play();
+    }
+
     // HTML Elements
     private closeButton: HTMLElement = document.getElementById("exit-info")!;
     private closeButton2: HTMLElement = document.getElementById("exit-info-button")!;
@@ -16,16 +24,17 @@ export default class InfoBlock extends PhadeBlock {
         this.closeButton.addEventListener("click", () => {
             if (this.phase != PhadePhase.Hold) return;
 
-            const disable = this.Disable.bind(this);
-            disable();
+            this.PlayExitSound();
+            this.Disable();
             this.mangerie.SetState(GameState.Menu);
         });
         this.closeButton2.addEventListener("click", () => {
             if (this.phase != PhadePhase.Hold) return;
 
-            const disable = this.Disable.bind(this);
-            disable();
+            this.PlayExitSound();
+            this.Disable();
             this.mangerie.SetState(GameState.Menu);
         });
+        this.exitSound = mangerie.sounds.content.get("bowl")!.object;
     }
 }

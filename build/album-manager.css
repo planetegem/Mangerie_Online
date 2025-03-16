@@ -258,6 +258,7 @@
 }
 #album-title {
     border: none;
+    border-top: dashed 0.15em transparent;
     border-bottom: solid 0.15em var(--mainColorLight);
     font-size: 1.05em;
     font-family: Arial, Helvetica, sans-serif;
@@ -265,14 +266,17 @@
     font-variant: small-caps;
     color: var(--mainColor);
     text-align: center;
+    padding: 0.1em 0.4em;
     box-sizing: border-box;
     margin-bottom: 0.5em;
     field-sizing: content;
 }
 #album-title:focus {
-    border: none;
     outline: none;
     border-bottom: solid 0.15em var(--mainColor);
+}
+#album-title.error {
+    border: dashed 0.15em var(--errorRed);
 }
 #album-creator textarea {
     resize: none;
@@ -291,6 +295,14 @@
     height: 5em;
     width: 100%;
     margin-bottom: 1em;
+}
+#album-description.error:focus {
+    border-color: var(--errorRed);
+    border-style: dashed;
+}
+#album-description.error {
+    border-color: var(--errorRed);
+    border-style: dashed;
 }
 @media screen and (min-width: 600px){
     #created-album-header {
@@ -354,12 +366,20 @@
     grid-template-columns: min-content 1fr auto;
     width: 100%;
     gap: 0.5em;
+    border-width: 0.15em;
+    border-style: dashed;
+    border-color: transparent;
+    padding: 0.30em 0.6em;
+}
+.album-added-image.error {
+    border-color: var(--errorRed);
 }
 .album-added-image figure {
     position: relative;
     font-size: 1em;
     width: 7em;
     height: 7em;
+    background-color: white;
 }
 .album-added-image figure img, .album-added-image figure canvas {
     position: absolute;
@@ -538,16 +558,10 @@ span.error.album {
     height: 2.5em;
     margin-bottom: -2.5em;
     filter: var(--redFilter);
-    opacity: 0.85;
+    opacity: 0;
     user-select: none;
     visibility: hidden;
     overflow: hidden;
     text-overflow: ellipsis;
 } 
-span.error.album.active {
-    visibility: visible;
-    animation-name: blinkingError;
-    animation-duration: 3s;
-    animation-timing-function: steps(6, end);
-}
 

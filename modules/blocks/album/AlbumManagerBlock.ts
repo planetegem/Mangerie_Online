@@ -18,6 +18,18 @@ export default class AlbumManagerBlock extends PhadeBlock {
     // STATE PROPS
     private enabled: boolean = false;
 
+    // SOUND EFFECTS
+    private exitSound: HTMLAudioElement;
+    private PlayExitSound(): void {
+        this.exitSound.currentTime = 0;
+        this.exitSound.play();
+    }
+    private entrySound: HTMLAudioElement;
+    private PlayEntrySound(): void {
+        this.entrySound.currentTime = 0;
+        this.entrySound.play();
+    }
+
     // SWITCH BETWEEN COMPONENTS
     private currentBlock: Block;
     private switching: boolean = true;
@@ -31,6 +43,7 @@ export default class AlbumManagerBlock extends PhadeBlock {
     public OpenAlbumEditor(album: PhotoAlbum): void {
         this.Block = this.albumCreator;
         this.albumCreator.PrepareAlbum(album, false);
+        this.PlayEntrySound();
     }
 
     // SAVE ALBUMS TO LOCAL STORAGE
@@ -66,13 +79,15 @@ export default class AlbumManagerBlock extends PhadeBlock {
         // 1. return to menu from album picker
         exitToMenu.addEventListener("click", () => {
             if (this.phase != PhadePhase.Hold) return;
-                    
+            
+            this.PlayExitSound();
             this.Disable();
             this.mangerie.SetState(GameState.Menu);
         });
         confirmToMenu.addEventListener("click", () => {
             if (this.phase != PhadePhase.Hold) return;
-                    
+            
+            this.PlayExitSound();
             this.Disable();
             this.mangerie.SetState(GameState.Menu);
         });
@@ -81,6 +96,7 @@ export default class AlbumManagerBlock extends PhadeBlock {
         createNewAlbum.addEventListener("click", () => {
             if (this.phase != PhadePhase.Hold) return;
 
+            this.PlayEntrySound();
             this.Block = this.albumCreator;
             this.albumCreator.PrepareAlbum();
         });
@@ -88,10 +104,12 @@ export default class AlbumManagerBlock extends PhadeBlock {
         // 3. exit album creator (to album picker) 
         exitAlbumCreator.addEventListener("click", () => {
             if (this.phase != PhadePhase.Hold) return;
+            this.PlayExitSound();
             this.Block = this.albumPicker;
         });
         cancelAlbumCreation.addEventListener("click", () => {
             if (this.phase != PhadePhase.Hold) return;
+            this.PlayExitSound();
             this.Block = this.albumPicker;
         });
 
@@ -109,6 +127,8 @@ export default class AlbumManagerBlock extends PhadeBlock {
                 this.SaveToStorage();
             }
         });
+        this.exitSound = mangerie.sounds.content.get("bowl")!.object;
+        this.entrySound = mangerie.sounds.content.get("bowl2")!.object;
     }
 
     // OVERRIDE ENABLE: if already enabled, return early + set albumPicker as active block

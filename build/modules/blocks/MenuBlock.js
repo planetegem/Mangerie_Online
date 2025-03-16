@@ -1,6 +1,20 @@
 import { GameState, PhadePhase } from "../Enums.js";
 import PhadeBlock from "./PhadeBlock.js";
 export default class MenuBlock extends PhadeBlock {
+    PlayOpeningSound() {
+        this.openingSound.currentTime = 0;
+        this.openingSound.play();
+        this.openingSoundPlayed = true;
+    }
+    PlayWindowSound() {
+        this.windowSound.currentTime = 0;
+        this.windowSound.play();
+        this.windowSoundPlayed = true;
+    }
+    PlayBowlSound() {
+        this.buttonSound.currentTime = 0;
+        this.buttonSound.play();
+    }
     // OVERRIDE ENABLE AND DISABLE METHODS (FOR STATE SWITCHING WITHOUT REAL DISABLE)
     Disable() {
         this.enabled = false;
@@ -19,6 +33,7 @@ export default class MenuBlock extends PhadeBlock {
         this.fading = true;
         this.enabled = false;
         this.openingSoundPlayed = false;
+        this.windowSoundPlayed = false;
         // MENU BUTTONS
         this.start = document.getElementById("start-button");
         this.album = document.getElementById("album-button");
@@ -26,7 +41,7 @@ export default class MenuBlock extends PhadeBlock {
         this.logoDeco = document.getElementById("online-deco");
         this.buttonContainer = document.getElementById("menu-buttons");
         // TIMINGS
-        this.logoFade = 1500;
+        this.logoFade = 1800;
         this.buttonsDelay = 1500;
         this.buttonsFade = 1000;
         this.durationIn = 1000;
@@ -36,22 +51,26 @@ export default class MenuBlock extends PhadeBlock {
         this.start.addEventListener("click", () => {
             if (this.phase != PhadePhase.Hold)
                 return;
-            const disable = this.Disable.bind(this);
-            disable();
+            this.PlayBowlSound();
+            this.Disable();
             this.startingGame = true;
         });
         this.album.addEventListener("click", () => {
             if (this.phase != PhadePhase.Hold)
                 return;
             this.mangerie.SetState(GameState.AlbumManager);
+            this.PlayBowlSound();
         });
         this.info.addEventListener("click", () => {
             if (this.phase != PhadePhase.Hold)
                 return;
             this.mangerie.SetState(GameState.Info);
+            this.PlayBowlSound();
         });
         // Set sound effects
-        this.openingSound = mangerie.sounds.content.get("spaceship").object;
+        this.openingSound = mangerie.sounds.content.get("wind-up").object;
+        this.buttonSound = mangerie.sounds.content.get("bowl2").object;
+        this.windowSound = mangerie.sounds.content.get("window").object;
     }
     // MAIN UPDATE FUNCTION: ANIMATE LOGO
     Update(delta) {
@@ -59,9 +78,8 @@ export default class MenuBlock extends PhadeBlock {
         switch (this.phase) {
             case PhadePhase.Hold:
                 this.logoDeco.classList.add("start-fade");
-                if (!this.openingSoundPlayed && this.runtime >= this.logoFade - 500) {
-                    this.openingSoundPlayed = true;
-                    this.openingSound.play();
+                if (!this.openingSoundPlayed && this.runtime >= this.logoFade - 400) {
+                    this.PlayOpeningSound();
                 }
                 if (this.fading) {
                     if (this.runtime >= this.logoFade + this.buttonsDelay + this.buttonsFade) {
@@ -69,6 +87,8 @@ export default class MenuBlock extends PhadeBlock {
                         this.fading = false;
                     }
                     else if (this.runtime >= this.logoFade + this.buttonsDelay) {
+                        if (!this.windowSoundPlayed)
+                            this.PlayWindowSound();
                         this.buttonContainer.style.opacity = ((this.runtime - (this.logoFade + this.buttonsDelay)) / this.buttonsFade).toString();
                     }
                 }
@@ -79,8 +99,7 @@ export default class MenuBlock extends PhadeBlock {
                 this.buttonContainer.style.opacity = "0";
                 // Reset sound effect
                 this.openingSoundPlayed = false;
-                this.openingSound.pause();
-                this.openingSound.currentTime = 0;
+                this.windowSoundPlayed = false;
                 if (this.startingGame) {
                     this.startingGame = false;
                     this.mangerie.SetState(GameState.Titlecard);

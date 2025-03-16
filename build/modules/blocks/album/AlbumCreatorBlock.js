@@ -1,6 +1,7 @@
 import { ErrorMessages } from "../../Enums.js";
 import { FitImage } from "../../Helpers.js";
 import PhadeBlock from "../PhadeBlock.js";
+import ErrorFeedbackBlock from "./ErrorFeedbackBlock.js";
 import FileSelectorDialog from "./FileSelectorDialog.js";
 import PhotoAlbum from "./PhotoAlbum.js";
 export default class AlbumCreatorBlock extends PhadeBlock {
@@ -10,7 +11,7 @@ export default class AlbumCreatorBlock extends PhadeBlock {
     }
     // Can start from existing album (when editing)
     // Default is empty album
-    PrepareAlbum(album = new PhotoAlbum({ title: "New Album", description: "", cover: "", images: [] }, false), newAlbum = true) {
+    PrepareAlbum(album = new PhotoAlbum({ title: "New Album", description: "Your very own custom album for Mangerie Online, the finest kaleidoscope in the world!", cover: "", images: [] }, false), newAlbum = true) {
         this.album = album;
         this.newAlbum = newAlbum;
         this.content = [];
@@ -22,53 +23,57 @@ export default class AlbumCreatorBlock extends PhadeBlock {
     // return false if album is invalid
     // return true if album is valid and saved to local storage
     CreateAlbum() {
-        // Error flow: no title or description
-        if (this.albumTitle.value === "" || this.albumDescription.value === "") {
+        // 1. return early if no title
+        if (this.albumTitle.value === "") {
+            this.albumTitle.classList.add("in-error");
+            this.albumTitle.focus({ preventScroll: true });
             this.albumTitle.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
             this.Error = ErrorMessages.Album01;
             return false;
         }
-        this.album.title = this.albumTitle.value;
-        this.album.description = this.albumDescription.value;
-        // Error flow: no images
+        // 2. return early if no description
+        if (this.albumDescription.value === "") {
+            this.albumDescription.classList.add("in-error");
+            this.albumDescription.focus({ preventScroll: true });
+            this.albumTitle.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+            this.Error = ErrorMessages.Album01b;
+            return false;
+        }
+        // 3. return early if no images
         if (this.content.length <= 0) {
             this.Error = ErrorMessages.Album02;
             return false;
         }
-        // Error flow: there are images, but some of them are incomplete
+        // 4. return early if images are incomplete
         let contentValid = true, newContent = [];
         for (let photo of this.content) {
             contentValid = photo.Validate();
             if (contentValid)
                 newContent.push(photo.Result);
-            if (!contentValid)
+            if (!contentValid) {
+                photo.SetClass("in-error");
                 break;
+            }
         }
-        if (contentValid) {
-            this.album.content = newContent;
-            return true;
-        }
-        else {
+        if (!contentValid) {
             this.Error = ErrorMessages.Album03;
             return false;
         }
+        // 5. succes!
+        this.album.title = this.albumTitle.value;
+        this.album.description = this.albumDescription.value;
+        this.album.content = newContent;
+        this.confirmSound.currentTime = 0;
+        this.confirmSound.play();
+        return true;
     }
     RetrieveAlbum() {
         return [this.album, this.newAlbum];
     }
-    // ERROR LOGIC
     set Error(value) {
-        if (value === null) {
-            this.errorLabel.classList.remove("active");
-        }
-        else {
-            this.errorLabel.innerText = value;
-            this.errorLabel.classList.add("active");
-            const replacement = this.errorLabel.cloneNode(true);
-            this.errorLabel.parentNode.replaceChild(replacement, this.errorLabel);
-            this.errorLabel = replacement;
-        }
+        this.errorBlock.Message = value;
     }
+    // LINE INTERFACE LOGIC
     FillImageList() {
         // First empty the container
         while (this.container.firstChild) {
@@ -80,6 +85,8 @@ export default class AlbumCreatorBlock extends PhadeBlock {
     }
     MoveLine(index, direction) {
         const line = this.content[index];
+        this.pressSound.currentTime = 0;
+        this.pressSound.play();
         // First test if new position is valid
         if ((index + direction < 0) || (index + direction >= this.content.length))
             return;
@@ -103,38 +110,56 @@ export default class AlbumCreatorBlock extends PhadeBlock {
         // HTML PROPS
         this.container = document.getElementById("created-album-content");
         this.addNewImageButton = document.getElementById("add-new-image");
-        this.errorLabel = document.getElementById("album-creator-error");
         // ELEMENTS FOR NEW ALBUM
         this.content = [];
         // ALBUM PROPS
         this.album = new PhotoAlbum({ title: "New Album", description: "", cover: "", images: [] }, false);
         this.newAlbum = true;
-        this.fileSelector = new FileSelectorDialog();
+        // ERROR LOGIC
+        this.errorLabel = document.getElementById("album-creator-error");
+        this.errorBlock = new ErrorFeedbackBlock(this.errorLabel, mangerie.sounds.content.get("error").object);
+        this.fileSelector = new FileSelectorDialog(mangerie);
+        this.pressSound = mangerie.sounds.content.get("press").object;
+        this.confirmSound = mangerie.sounds.content.get("bowl2").object;
         const albumHeader = document.getElementById("created-album-header");
         this.albumTitle = document.createElement("input");
         this.albumTitle.type = "text";
         this.albumTitle.id = "album-title";
+        this.albumTitle.maxLength = 35;
+        this.albumTitle.placeholder = "Name your custom album";
         albumHeader.appendChild(this.albumTitle);
+        this.albumTitle.oninput = () => {
+            this.albumTitle.classList.remove("in-error");
+            this.albumTitle.classList.remove("error");
+        };
         this.albumDescription = document.createElement("textarea");
         this.albumDescription.id = "album-description";
         this.albumDescription.placeholder = "This is where the description for your custom photo album goes...";
+        this.albumDescription.maxLength = 150;
         albumHeader.appendChild(this.albumDescription);
+        this.albumDescription.oninput = () => {
+            this.albumDescription.classList.remove("in-error");
+            this.albumDescription.classList.remove("error");
+        };
         document.getElementById("add-new-image-button").addEventListener("click", (e) => {
             e.preventDefault();
             this.content.push(new AlbumCreatorLine(this));
-            const cb = this.FillImageList.bind(this);
-            cb();
+            this.pressSound.currentTime = 0;
+            this.pressSound.play();
+            this.FillImageList();
         });
     }
     // MAIN UPDATE FUNCTION
     Update(delta) {
         super.Update(delta);
         this.fileSelector.Update(delta);
+        this.errorBlock.Update(delta);
         return this.phase;
     }
 }
 class AlbumCreatorLine {
     get Result() {
+        this.photo.desc = (this.description.value != "") ? this.description.value : this.photo.desc;
         this.photo.object = this.preview;
         return this.photo;
     }
@@ -164,25 +189,17 @@ class AlbumCreatorLine {
             if (this.photo.dataURL)
                 delete this.photo.dataURL;
         }
-        this.SetPreview();
-    }
-    SetImage(src, base64 = false) {
-        if (base64) {
-            this.photo.dataURL = src;
-        }
-        else {
-            this.photo.src = src;
-            if (this.photo.dataURL)
-                delete this.photo.dataURL;
-        }
+        this.container.classList.remove("in-error");
+        this.container.classList.remove("error");
         this.SetPreview();
     }
     Validate() {
-        if (this.description.value != "")
-            this.photo.desc = this.description.value;
-        console.log(this.photo);
         let result = this.descriptionRequired ? this.description.value != "" : true;
         return result ? (this.photo.src != "" || (this.photo.dataURL != null && this.photo.dataURL != "")) : false;
+    }
+    SetClass(value) {
+        this.container.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+        this.container.classList.add(value);
     }
     Append(index) {
         this.index = index;
@@ -216,7 +233,12 @@ class AlbumCreatorLine {
         this.description = document.createElement("textarea");
         this.description.value = this.photo.desc;
         this.description.placeholder = "Enter a description for your image here...";
+        this.description.maxLength = 160;
         this.container.appendChild(this.description);
+        this.description.oninput = () => {
+            this.container.classList.remove("in-error");
+            this.container.classList.remove("error");
+        };
         // 4. Line management buttons
         const buttonContainer = document.createElement("nav");
         buttonContainer.classList.add("album-added-image-nav");

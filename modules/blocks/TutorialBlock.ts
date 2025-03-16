@@ -11,10 +11,14 @@ export default class TutorialBlock extends PhadeBlock {
     private interactionAllowed: boolean = false;
     private start: boolean = true;
 
+    // SOUND EFFECT
+    private sound: HTMLAudioElement;
+
     // CONSTRUCTOR
     constructor(mangerie: Mangerie){
         const container: HTMLElement = document.getElementById("tutorial")!;
         super(mangerie, container);
+        this.sound = mangerie.sounds.content.get("duck")!.object;
 
         this.articles = [];
         let htmlArticles: HTMLElement[] = Array.from(document.querySelectorAll("#tutorial article"));
@@ -49,6 +53,9 @@ export default class TutorialBlock extends PhadeBlock {
     }
 
     private Next(): boolean {
+        this.sound.currentTime = 0;
+        this.sound.play();
+
         if (this.step >= this.articles.length - 1)
             return true;
 
@@ -67,6 +74,8 @@ export default class TutorialBlock extends PhadeBlock {
             article.Reset();
         }
         this.start = true;
+        this.sound.currentTime = 0;
+        this.sound.play();
         super.Enable();
     }
 

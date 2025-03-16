@@ -20,7 +20,8 @@ export enum ErrorMessages {
     File03 = "(*) URL appears to be incorrect (couldn't load image)",
     File04 = "(*) no file was uploaded",
     File05 = "(*) something went wrong with FileReader - result was null",
-    Album01 = "(*) an album needs at least a title and description to be saved",
+    Album01 = "(*) an album needs at least a title to be saved",
+    Album01b = "(*) an album needs at least a description to be saved",
     Album02 = "(*) an album needs at least one image to be valid",
     Album03 = "(*) not all entries in the album are complete"
 }

@@ -10,6 +10,7 @@ export default class TutorialBlock extends PhadeBlock {
         this.step = 0;
         this.interactionAllowed = false;
         this.start = true;
+        this.sound = mangerie.sounds.content.get("duck").object;
         this.articles = [];
         let htmlArticles = Array.from(document.querySelectorAll("#tutorial article"));
         for (let i = 0; i < htmlArticles.length; i++) {
@@ -38,6 +39,8 @@ export default class TutorialBlock extends PhadeBlock {
         });
     }
     Next() {
+        this.sound.currentTime = 0;
+        this.sound.play();
         if (this.step >= this.articles.length - 1)
             return true;
         this.step++;
@@ -54,6 +57,8 @@ export default class TutorialBlock extends PhadeBlock {
             article.Reset();
         }
         this.start = true;
+        this.sound.currentTime = 0;
+        this.sound.play();
         super.Enable();
     }
     // UPDATE IMPLEMENTATION: ADD SWITCHING ANIMATION

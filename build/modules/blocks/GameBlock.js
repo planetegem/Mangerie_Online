@@ -1,6 +1,10 @@
 import { GameState, PhadePhase } from "../Enums.js";
 import Kaleidoscope from "../kaleidoscope/Kaleidoscope.js";
 export default class GameBlock extends Kaleidoscope {
+    PlayExitSound() {
+        this.exitSound.currentTime = 0;
+        this.exitSound.play();
+    }
     // CONSTRUCTOR
     constructor(mangerie) {
         super(mangerie);
@@ -17,8 +21,10 @@ export default class GameBlock extends Kaleidoscope {
             this.mangerie.SetState(GameState.Tutorial);
         });
         document.getElementById("return-button").addEventListener("click", () => {
+            this.PlayExitSound();
             this.Disable();
         });
+        this.exitSound = mangerie.sounds.content.get("bowl").object;
     }
     // CUSTOM ENABLE FUNCTION TO RESET KALEIDOSCOPE VALUES
     Enable() {

@@ -1,6 +1,19 @@
 import { ErrorMessages } from "../../Enums.js";
 import PhadeModal from "../PhadeModal.js";
+import ErrorFeedbackBlock from "./ErrorFeedbackBlock.js";
 export default class FileSelectorDialog extends PhadeModal {
+    PlayExitSound() {
+        this.exitSound.currentTime = 0;
+        this.exitSound.play();
+    }
+    PlayEntrySound() {
+        this.entrySound.currentTime = 0;
+        this.entrySound.play();
+    }
+    PlaySelectSound() {
+        this.selectSound.currentTime = 0;
+        this.selectSound.play();
+    }
     set Option(value) {
         switch (value) {
             case 0:
@@ -18,18 +31,8 @@ export default class FileSelectorDialog extends PhadeModal {
         }
         this.selectedOption = value;
     }
-    // ERROR FEEDBACK: if error, clone and replace error span to restart animation
     set Error(value) {
-        if (value === null) {
-            this.errorLabel.classList.remove("active");
-        }
-        else {
-            this.errorLabel.innerText = value;
-            this.errorLabel.classList.add("active");
-            const replacement = this.errorLabel.cloneNode(true);
-            this.errorLabel.parentNode.replaceChild(replacement, this.errorLabel);
-            this.errorLabel = replacement;
-        }
+        this.errorBlock.Message = value;
     }
     set Thinking(value) {
         this.thinking = value;
@@ -41,7 +44,7 @@ export default class FileSelectorDialog extends PhadeModal {
         this.exitButton.style.cursor = cursor;
     }
     // CONSTRUCTOR: mainly event listeners
-    constructor() {
+    constructor(mangerie) {
         const dialog = document.getElementById("file-selector");
         super(dialog);
         // HTML ELEMENTS
@@ -52,18 +55,24 @@ export default class FileSelectorDialog extends PhadeModal {
         this.fileInput = document.getElementById("file-input");
         this.fileInputFeedback = document.getElementById("file-input-feedback");
         this.confirmButton = document.getElementById("confirm-file-selection");
-        this.errorLabel = document.getElementById("file-selector-error");
         // CALLER: object expecting a response
         this.caller = null;
         // SELECTION LOGIC:
         // 0 = nothing selected, 1 = external url, 2 = uploaded file
         this.selectedOption = 0;
+        // ERROR FEEDBACK: if error, clone and replace error span to restart animation
+        this.errorLabel = document.getElementById("file-selector-error");
         // THINKING: block interaction if processing input
         this.thinking = false;
+        this.errorBlock = new ErrorFeedbackBlock(this.errorLabel, mangerie.sounds.content.get("error").object);
+        this.exitSound = mangerie.sounds.content.get("bowl").object;
+        this.entrySound = mangerie.sounds.content.get("bowl2").object;
+        this.selectSound = mangerie.sounds.content.get("press").object;
         // EVENT LISTENERS
         // 1. Exit without saving (upper right corner X)
         this.exitButton.addEventListener("click", (e) => {
             e.preventDefault;
+            this.PlayExitSound();
             if (this.thinking)
                 return;
             this.Disable();
@@ -72,11 +81,13 @@ export default class FileSelectorDialog extends PhadeModal {
         this.urlInputLabel.addEventListener("click", () => {
             if (this.thinking)
                 return;
+            this.PlaySelectSound();
             this.Option = 1;
         });
         this.fileInputLabel.addEventListener("click", () => {
             if (this.thinking)
                 return;
+            this.PlaySelectSound();
             this.Option = 2;
         });
         // 3. Feedback after selecting file
@@ -124,6 +135,7 @@ export default class FileSelectorDialog extends PhadeModal {
                             if (this.caller) {
                                 this.caller.ReceivedFile = { result: submission, type: "image" };
                                 this.Thinking = false;
+                                this.PlayEntrySound();
                                 this.Disable();
                             }
                             else {
@@ -179,5 +191,10 @@ export default class FileSelectorDialog extends PhadeModal {
         this.Option = 0;
         this.Error = null;
         this.modal.showModal();
+    }
+    Update(delta) {
+        super.Update(delta);
+        this.errorBlock.Update(delta);
+        return this.phase;
     }
 }

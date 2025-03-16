@@ -9,9 +9,26 @@ export default class MenuBlock extends PhadeBlock {
     private fading: boolean = true;
     private enabled: boolean = false;
 
-    // SOUND EFFECT
+    // SOUND EFFECTS
     private openingSound: HTMLAudioElement;
     private openingSoundPlayed: boolean = false;
+    private PlayOpeningSound(): void {
+        this.openingSound.currentTime = 0;
+        this.openingSound.play();
+        this.openingSoundPlayed = true;
+    }
+    private windowSound: HTMLAudioElement;
+    private windowSoundPlayed: boolean = false;
+    private PlayWindowSound(): void {
+        this.windowSound.currentTime = 0;
+        this.windowSound.play();
+        this.windowSoundPlayed = true;
+    }
+    private buttonSound: HTMLAudioElement;
+    private PlayBowlSound(): void {
+        this.buttonSound.currentTime = 0;
+        this.buttonSound.play();
+    }
 
     // MENU BUTTONS
     private start: HTMLElement = document.getElementById("start-button")!;
@@ -21,9 +38,10 @@ export default class MenuBlock extends PhadeBlock {
     private buttonContainer: HTMLElement = document.getElementById("menu-buttons")!;
 
     // TIMINGS
-    private logoFade: number = 1500;
+    private logoFade: number = 1800;
     private buttonsDelay: number = 1500;
     private buttonsFade: number = 1000;
+
 
     // OVERRIDE ENABLE AND DISABLE METHODS (FOR STATE SWITCHING WITHOUT REAL DISABLE)
     public Disable(): void {
@@ -48,21 +66,26 @@ export default class MenuBlock extends PhadeBlock {
         this.start.addEventListener("click", () => {
             if (this.phase != PhadePhase.Hold) return;
 
-            const disable = this.Disable.bind(this);
-            disable();
+            this.PlayBowlSound();
+            this.Disable();
             this.startingGame = true;
         });
         this.album.addEventListener("click", () => {
             if (this.phase != PhadePhase.Hold) return;
             this.mangerie.SetState(GameState.AlbumManager);
+            this.PlayBowlSound();
         });
         this.info.addEventListener("click", () => {
             if (this.phase != PhadePhase.Hold) return;
             this.mangerie.SetState(GameState.Info);
+            this.PlayBowlSound();
         });
 
         // Set sound effects
-        this.openingSound = mangerie.sounds.content.get("spaceship")!.object;
+        this.openingSound = mangerie.sounds.content.get("wind-up")!.object;
+        this.buttonSound = mangerie.sounds.content.get("bowl2")!.object;
+        this.windowSound = mangerie.sounds.content.get("window")!.object;
+
     }
 
     // MAIN UPDATE FUNCTION: ANIMATE LOGO
@@ -72,9 +95,8 @@ export default class MenuBlock extends PhadeBlock {
         switch(this.phase){
             case PhadePhase.Hold:
                 this.logoDeco.classList.add("start-fade");
-                if (!this.openingSoundPlayed && this.runtime >= this.logoFade - 500){
-                    this.openingSoundPlayed = true;
-                    this.openingSound.play();
+                if (!this.openingSoundPlayed && this.runtime >= this.logoFade - 400){
+                    this.PlayOpeningSound();
                 }
 
                 if (this.fading){
@@ -82,6 +104,7 @@ export default class MenuBlock extends PhadeBlock {
                         this.buttonContainer.style.opacity = "1";
                         this.fading = false;
                     } else if (this.runtime >= this.logoFade + this.buttonsDelay){
+                        if (!this.windowSoundPlayed) this.PlayWindowSound();
                         this.buttonContainer.style.opacity = ((this.runtime - (this.logoFade + this.buttonsDelay)) / this.buttonsFade).toString();
                     }
                 }
@@ -93,8 +116,7 @@ export default class MenuBlock extends PhadeBlock {
 
                 // Reset sound effect
                 this.openingSoundPlayed = false;
-                this.openingSound.pause();
-                this.openingSound.currentTime = 0;
+                this.windowSoundPlayed = false;
 
                 if (this.startingGame){
                     this.startingGame = false;

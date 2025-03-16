@@ -19,6 +19,13 @@ export default class GameBlock extends Kaleidoscope implements Block {
     // HTML ELEMENTS
     private container: HTMLElement;
 
+    // SOUND EFFECTS
+    private exitSound: HTMLAudioElement;
+    private PlayExitSound(): void {
+        this.exitSound.currentTime = 0;
+        this.exitSound.play();
+    }
+
     // CONSTRUCTOR
     constructor(mangerie: Mangerie){
         super(mangerie);
@@ -31,9 +38,10 @@ export default class GameBlock extends Kaleidoscope implements Block {
             this.mangerie.SetState(GameState.Tutorial);
         });
         document.getElementById("return-button")!.addEventListener("click", () => {
+            this.PlayExitSound();
             this.Disable();
         });
-
+        this.exitSound = mangerie.sounds.content.get("bowl")!.object;
     }
 
     // CUSTOM ENABLE FUNCTION TO RESET KALEIDOSCOPE VALUES

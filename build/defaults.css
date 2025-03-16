@@ -10,6 +10,8 @@
     --borderWidth: min(2.5vw, 2vh);
     --mainPadding: min(10vw, 5vh);
     --fontSize: min(4vw, 2.5vh);
+    --errorRed: rgba(187, 35, 35, 0.600);
+    --errorBackground: rgba(187, 35, 35, 0.150);
 }
 h1, h2, h3, h4, h5, a, button, p, span, ul, li, figure {
     all: unset;
@@ -44,14 +46,6 @@ h1, p, span {
 /* CSS animations: where possible/practical, replaced by js animations */
 @keyframes blinkingContinue {
     to {visibility: hidden;}
-}
-@keyframes blinkingError {
-    0% {visibility: visible;}
-    20% {visibility: hidden;}
-    40% {visibility: visible;}
-    60% {visibility: hidden;}
-    80% {visibility: visible;}
-    100% {visibility: hidden;}
 }
 @font-face {
     font-family: GreatVibes;

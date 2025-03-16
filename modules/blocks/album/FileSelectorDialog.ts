@@ -1,6 +1,8 @@
-import { ErrorMessages } from "../../Enums.js";
+import { ErrorMessages, PhadePhase } from "../../Enums.js";
 import { IFileReceiver } from "../../Interfaces.js";
+import Mangerie from "../../Mangerie.js";
 import PhadeModal from "../PhadeModal.js";
+import ErrorFeedbackBlock from "./ErrorFeedbackBlock.js";
 
 export default class FileSelectorDialog extends PhadeModal {
 
@@ -12,10 +14,26 @@ export default class FileSelectorDialog extends PhadeModal {
     private fileInput: HTMLInputElement = document.getElementById("file-input")! as HTMLInputElement;
     private fileInputFeedback: HTMLElement = document.getElementById("file-input-feedback")!;
     private confirmButton: HTMLElement = document.getElementById("confirm-file-selection")!;
-    private errorLabel: HTMLElement = document.getElementById("file-selector-error")!;
 
     // CALLER: object expecting a response
     public caller: IFileReceiver | null = null;
+
+    // SOUND EFFECTS
+    private exitSound: HTMLAudioElement;
+    private PlayExitSound(): void {
+        this.exitSound.currentTime = 0;
+        this.exitSound.play();
+    }
+    private entrySound: HTMLAudioElement;
+    private PlayEntrySound(): void {
+        this.entrySound.currentTime = 0;
+        this.entrySound.play();
+    }
+    private selectSound: HTMLAudioElement;
+    private PlaySelectSound(): void {
+        this.selectSound.currentTime = 0;
+        this.selectSound.play();
+    }
 
     // SELECTION LOGIC:
     // 0 = nothing selected, 1 = external url, 2 = uploaded file
@@ -39,18 +57,11 @@ export default class FileSelectorDialog extends PhadeModal {
     }
 
     // ERROR FEEDBACK: if error, clone and replace error span to restart animation
+    private errorLabel: HTMLElement = document.getElementById("file-selector-error")!;
+    private errorBlock: ErrorFeedbackBlock;
     private set Error(value: ErrorMessages | null){
-        if (value === null){
-            this.errorLabel.classList.remove("active");
-
-        } else {
-            this.errorLabel.innerText = value;
-            this.errorLabel.classList.add("active");
-            const replacement: HTMLElement = this.errorLabel.cloneNode(true) as HTMLElement;
-            this.errorLabel.parentNode!.replaceChild(replacement, this.errorLabel);
-            this.errorLabel = replacement;
-        }
-    }
+       this.errorBlock.Message = value;
+    }    
 
     // THINKING: block interaction if processing input
     private thinking: boolean = false;
@@ -66,15 +77,20 @@ export default class FileSelectorDialog extends PhadeModal {
     }
 
     // CONSTRUCTOR: mainly event listeners
-    constructor() {
-
+    constructor(mangerie: Mangerie) {
         const dialog: HTMLDialogElement = document.getElementById("file-selector")! as HTMLDialogElement;
         super(dialog);
+        this.errorBlock = new ErrorFeedbackBlock(this.errorLabel, mangerie.sounds.content.get("error")!.object);
+        this.exitSound = mangerie.sounds.content.get("bowl")!.object;
+        this.entrySound = mangerie.sounds.content.get("bowl2")!.object;
+        this.selectSound = mangerie.sounds.content.get("press")!.object;
+
 
         // EVENT LISTENERS
         // 1. Exit without saving (upper right corner X)
         this.exitButton.addEventListener("click", (e) => {
             e.preventDefault;
+            this.PlayExitSound();
 
             if (this.thinking) return;
             this.Disable();
@@ -83,10 +99,12 @@ export default class FileSelectorDialog extends PhadeModal {
         // 2. Select which option will be passed to caller
         this.urlInputLabel.addEventListener("click", () => {
             if (this.thinking) return;
+            this.PlaySelectSound();
             this.Option = 1;
         });
         this.fileInputLabel.addEventListener("click", () => {
             if (this.thinking) return;
+            this.PlaySelectSound();
             this.Option = 2;
         });
 
@@ -132,6 +150,7 @@ export default class FileSelectorDialog extends PhadeModal {
                             if (this.caller) {
                                 this.caller.ReceivedFile = {result: submission, type: "image"};
                                 this.Thinking = false;
+                                this.PlayEntrySound();
                                 this.Disable();
                             } else {
                                 console.warn("something went wrong with FileSelector: no caller was assigned");
@@ -187,5 +206,12 @@ export default class FileSelectorDialog extends PhadeModal {
         this.Option = 0;
         this.Error = null;
         (this.modal as HTMLDialogElement).showModal();
+    }
+
+    public Update(delta: number): PhadePhase {
+        super.Update(delta);
+        this.errorBlock.Update(delta);
+
+        return this.phase;
     }
 }
